@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load app_filters %}
+
+{% block head_title %}
+{% if author %}
+{{ author }} projects
+{% else %}
+Projects
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}{% if author == user.username %}
+<a href="{% url 'model_form_upload' %}">Create new project</a>
+{% endif %}{% endif %}
+{% if documents %}
+{% if author %}
+<p>{{ author }} projects:</p>
+{% else %}
+<p>All projects:</p>
+{% endif %}
+<ul>
+  {% for obj in documents %}
+  <li>
+    <a href="{% url 'view_project' obj.name %}">{{ obj.name }}</a>
+    <p><small>Description: {{ obj.description | truncatelines:3 | linebreaksbr }}</small></p>
+    <p><small>Author: <a href="{% url 'view_user_projects' obj.author %}">{{ obj.author }}</a></small></p>
+    <p><small>Updated at: {{ obj.last_updated }}</small></p>
+    <p><small>Rating: {{ obj.rating }}</small></p>
+    <p><small>Total activations: {{ obj.total_activations }}</small></p>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+{% if author %}
+{% if user.is_authenticated %}{% if author == user.username %}
+<p>You do not have projects yet.</p>
+{% endif %}{% else %}
+<p>User <b>{{ author }}</b> does not exists or havent created any projects yet.</p>
+{% endif %}
+{% else %}
+<p>Something happened? Why so empty here?</p>
+{% endif %}
+{% endif %}
+
+<p><a href="{% url 'home' %}">Return to home</a></p>
+{% endblock %}

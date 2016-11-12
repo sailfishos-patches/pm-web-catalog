@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block head_title %}
+Project: {{ project.name }}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}{% if project.author == user.username %}
+<p><a href="{% url 'edit_project' project.name %}">Edit project</a></p>
+{% endif %}{% endif %}
+<p>Name: {{ project.name }}</p>
+<p>Display name: {{ project.display_name }}</p>
+<p><small>Author: <a href="{% url 'view_user_projects' project.author %}">{{ project.author }}</a></small></p>
+<p><small>Updated at: {{ project.last_updated }}</small></p>
+<p><small>Description: {{ project.description | linebreaksbr }}</small></p>
+<p><small>Rating: {{ project.rating }}</small></p>
+<p><small>Total activations: {{ project.total_activations }}</small></p>
+{% if files %}
+<p>Files:</p>
+<ul>
+{% for file in files %}
+  <li>
+    <p><small>Version: {{ file.version }}</small></p>
+    <p><small>Compatible: {{ file.compatible }}</small></p>
+    <p><small>Uploaded at: {{ file.uploaded }}</small></p>
+    <p><small>Activations: {{ file.activations }}</small></p>
+    <p><a href="{{ file.document.url }}">{{ file.document.name }}</a></p>
+  </li>
+{% endfor %}
+</ul>
+{% else %}
+<p>No files here!</p>
+{% endif %}
+<p><a href="{% url 'home' %}">Return to home</a></p>
+{% endblock %}

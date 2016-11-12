@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block head_title %}
+Project: {{ project_name }}
+{% endblock %}
+
+{% block content %}
+<p>Name: {{ project_form.instance.name }}</p>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ project_form.as_p }}
+  <button type="submit" name='project-edit'>Save</button>
+</form>
+{% if files_forms %}
+<p>Files:</p>
+<ul>
+{% for file_form in files_forms %}
+  <li>
+    <p><form method="post" action="#">
+      {% csrf_token %}
+      <p>Version: {{ file_form.instance.version }}</p>
+      {{ file_form.as_p }}
+      <p>Document: <a href="{{ file_form.instance.document.url }}">{{ file_form.instance.document.name }}</a></p>
+      <input name="fileid" type="hidden" value="{{ file_form.instance.id }}">
+      <button type="submit" name='file-edit'>Save file</button>
+      <button type="submit" name='file-delete'>Delete file</button>
+    </form></p>
+  </li>
+{% endfor %}
+</ul>
+{% else %}
+<p>No files here!</p>
+{% endif %}
+<p>Upload new file (*.tar.gz, *.tar.xz, *.tar.bz2):</p>
+<p><form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ upload_form.as_p }}
+  <button type="submit" name="file-upload">Upload</button>
+</form></p>
+<p><a href="{% url 'delete_project' project_form.instance.name %}">Delete project</a></p>
+<p><a href="{% url 'home' %}">Return to home</a></p>
+{% endblock %}

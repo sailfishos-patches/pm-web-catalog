@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block head_title %}
+Patchmanager2 Documentation (kinda)
+{% endblock %}
+
+{% block content %}
+<p>Verifications for input fields:</p>
+<p>Name can contain only alphanumeric chars, underscore and hyphen. Name value is only used internally. For pretty name use Display name field. Available chars are 'a-z' 'A-Z' '0-9' '-' and '_'
+<br>Version should contain three numbers dot separated. Example: 1.2.3
+<br>Valid patch file extensions are: .zip .tar.gz .tar.bz2 .tar.xz</p>
+<p>Patch file validation:</p>
+<p>Patch file should contain three files:
+<br> - unified_diff.patch - patch file
+<br> - main.png - patch icon, displayed in catalog application
+<br> - main.qml - patch main page with information and configuration
+<br> It's allowed to have extra files with extensions: '.qml' '.js' '.png' '.svg' '.qm'</p>
+<p><a href="{% url 'home' %}">Return to home</a></p>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block head_title %}
+Project: {{ project.name }}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ project_form.as_p }}
+  {{ file_form.as_p }}
+  <button type="submit">Upload</button>
+</form>
+{% else %}
+<p>You need to <a href="{% url 'account_login' %}">Sign In</a> to create projects.</p>
+{% endif %}
+<p><a href="{% url 'home' %}">Return to home</a></p>
+{% endblock %}

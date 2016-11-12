@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block head_title %}
+Delete project: {{ project.name }}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}{% if project.author == user.username %}
+<p>You really want to delete project <b>{{ project.name }}</b>?</p>
+<p><form method="post" action="">
+  {% csrf_token %}
+  <button type="submit">Delete</button>
+</form></p>
+{% endif %}{% endif %}
+<p><a href="{% url 'home' %}">Return to home</a></p>
+{% endblock %}
