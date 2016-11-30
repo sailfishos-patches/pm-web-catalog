@@ -5,5 +5,9 @@ register = template.Library()
 
 
 @register.filter(name='truncatelines')
-def ellipses(value, count):
-    return '\n'.join(value.split('\n')[:count] + [' ... more'])
+def truncatelines(value, count):
+    lines = value.split('\n')
+    result = '\n'.join(lines[:count])
+    if len(lines) > count:
+        result += '\n ... more'
+    return result
