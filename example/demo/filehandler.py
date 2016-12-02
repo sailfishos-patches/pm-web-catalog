@@ -19,7 +19,7 @@ class ArchiveVerifier:
         elif self.filename.endswith(('.tar.gz', '.tar.bz2', '.tar.xz')):
             return self._list_tar()
         else:
-            return ('INVALID!')
+            return ('INVALID:', self.filename)
 
     def is_valid(self):
         content = self.list_archive()

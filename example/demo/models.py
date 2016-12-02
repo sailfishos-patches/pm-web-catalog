@@ -48,9 +48,15 @@ class ProjectsModel(models.Model):
     total_activations = models.PositiveIntegerField(blank=True, default=0)
 
 
+extensions = ('.tar.gz', '.tar.xz', '.tar.bz2', '.zip')
+
+
 class FilesModel(models.Model):
     def upload_path_handler(instance, filename):
-        return 'documents/{author}-{project}-{version}'.format(author=instance.author, project=instance.project, version=instance.version)
+        for i in extensions:
+            if filename.endswith(i):
+                ext = i
+        return 'documents/{author}-{project}-{version}{ext}'.format(author=instance.author, project=instance.project, version=instance.version, ext=ext)
 
     fs = OverwriteStorage()
 
@@ -63,7 +69,7 @@ class FilesModel(models.Model):
     )
 
     def validate_file_type(upload):
-        if not upload.name.lower().endswith(('.tar.gz', '.tar.xz', '.tar.bz2', '.zip')):
+        if not upload.name.lower().endswith(extensions):
             raise ValidationError('Unsupported file extension in: %s' % upload.name.lower())
 
     def validate_version(ver):
