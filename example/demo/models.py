@@ -83,3 +83,4 @@ class FilesModel(models.Model):
     version = models.CharField(blank=False, unique=True, max_length=15, validators=[validate_version])
     compatible = MultiSelectField(blank=False, max_length=255, choices=compatible_choices, default=compatible_choices_default)
     activations = models.PositiveIntegerField(blank=True, default=0)
+    changelog = models.CharField(max_length=512, blank=True)

@@ -24,6 +24,7 @@ Project: {{ project.name }}
     <p><small>Compatible: {{ file.compatible }}</small></p>
     <p><small>Uploaded at: {{ file.uploaded }}</small></p>
     <p><small>Activations: {{ file.activations }}</small></p>
+    <p><small>Changelog: {{ file.changelog | linebreaksbr }}</small></p>
     <p><a href="{{ file.document.url }}">{{ file.document.name }}</a></p>
   </li>
 {% endfor %}

@@ -32,24 +32,26 @@ class ProjectEditForm(forms.ModelForm):
 class FileForm(forms.ModelForm):
     class Meta:
         model = FilesModel
-        fields = ('version', 'compatible', 'document', 'author', 'project')
+        fields = ('version', 'compatible', 'document', 'changelog', 'author', 'project')
         widgets = {
             'author': forms.HiddenInput(),
             'project': forms.HiddenInput(),
             'version': forms.TextInput(attrs={'placeholder': '1.2.3'}),
             'compatible': forms.SelectMultiple(),
             'document': forms.FileInput(attrs={'accept': '.tar.gz,.tar.bz2,.tar.xz,.zip'}),
+            'changelog': forms.Textarea(attrs={'placeholder': 'Write changelog about this version'}),
         }
 
 
 class FileEditForm(forms.ModelForm):
     class Meta:
         model = FilesModel
-        fields = ('version', 'compatible', 'document', 'author', 'project')
+        fields = ('version', 'compatible', 'document', 'changelog', 'author', 'project')
         widgets = {
             'author': forms.HiddenInput(),
             'version': forms.HiddenInput(),
             'project': forms.HiddenInput(),
             'document': forms.HiddenInput(),
             'compatible': forms.SelectMultiple(),
+            'changelog': forms.Textarea(attrs={'placeholder': 'Write changelog about this version'}),
         }
