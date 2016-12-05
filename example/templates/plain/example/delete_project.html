@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load bootstrap3 %}
 
 {% block head_title %}
 Delete project: {{ project.name }}
@@ -9,7 +10,7 @@ Delete project: {{ project.name }}
 <p>You really want to delete project <b>{{ project.name }}</b>?</p>
 <p><form method="post" action="">
   {% csrf_token %}
-  <button type="submit">Delete</button>
+  {% bootstrap_button "Delete project" button_type="submit" button_class="btn-danger" %}
 </form></p>
 {% endif %}{% endif %}
 <p><a href="{% url 'home' %}">Return to home</a></p>

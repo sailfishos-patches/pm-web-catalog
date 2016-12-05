@@ -8,6 +8,7 @@ DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = PROJECT_ROOT
 
 DEBUG = True
 
@@ -99,7 +100,8 @@ TEMPLATES = [
             # project and tweak it according to your needs
             # os.path.join(PROJECT_ROOT, 'templates', 'uniform', 'allauth'),
             # example project specific templates
-            os.path.join(PROJECT_ROOT, 'templates', 'plain', 'example'),
+            os.path.join(BASE_DIR, 'templates', 'bootstrap', 'allauth'),
+            os.path.join(BASE_DIR, 'templates', 'plain', 'example'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -169,6 +171,7 @@ INSTALLED_APPS = (
 
     'example.demo',
     'multiselectfield',
+    'bootstrap3',
 )
 
 

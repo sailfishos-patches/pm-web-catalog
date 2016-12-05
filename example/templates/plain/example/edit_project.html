@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
+{% load bootstrap3 %}
 
 {% block head_title %}
 Project: {{ project_name }}
 {% endblock %}
 
 {% block content %}
+<div>
 <p>Name: {{ project_form.instance.name }}</p>
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  {{ project_form.as_p }}
-  <button type="submit" name='project-edit'>Save</button>
+  {% bootstrap_form project_form %}
+  {% bootstrap_button "Save project" button_type="submit" button_class="btn-primary" name="project-edit" %}
 </form>
 {% if files_forms %}
 <p>Files:</p>
@@ -19,11 +21,11 @@ Project: {{ project_name }}
     <p><form method="post" action="#">
       {% csrf_token %}
       <p>Version: {{ file_form.instance.version }}</p>
-      {{ file_form.as_p }}
+      {% bootstrap_form file_form %}
       <p>Document: <a href="{{ file_form.instance.document.url }}">{{ file_form.instance.document.name }}</a></p>
       <input name="fileid" type="hidden" value="{{ file_form.instance.id }}">
-      <button type="submit" name='file-edit'>Save file</button>
-      <button type="submit" name='file-delete'>Delete file</button>
+      {% bootstrap_button "Save file" button_type="submit" button_class="btn-primary" name="file-edit" %}
+      {% bootstrap_button "Delete file" button_type="submit" button_class="btn-danger" name="file-delete" %}
     </form></p>
   </li>
 {% endfor %}
@@ -32,11 +34,12 @@ Project: {{ project_name }}
 <p>No files here!</p>
 {% endif %}
 <p>Upload new file (*.tar.gz, *.tar.xz, *.tar.bz2):</p>
-<p><form method="post" enctype="multipart/form-data">
+<p><form method="post" enctype="multipart/form-data" {% if layout != 'vertical' %}class="form-{{ layout }}"{% endif %}>
   {% csrf_token %}
-  {{ upload_form.as_p }}
-  <button type="submit" name="file-upload">Upload</button>
+  {% bootstrap_form upload_form layout=layout %}
+  {% bootstrap_button "Upload file" button_type="submit" button_class="btn-primary" name="file-upload" %}
 </form></p>
 <p><a href="{% url 'delete_project' project_form.instance.name %}">Delete project</a></p>
 <p><a href="{% url 'home' %}">Return to home</a></p>
+</div>
 {% endblock %}

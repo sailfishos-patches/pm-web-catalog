@@ -1,4 +1,4 @@
 django>=1.10
 django-allauth>=0.26.1
 django-multiselectfield
-
+django-bootstrap3

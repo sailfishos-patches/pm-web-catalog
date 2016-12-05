@@ -38,7 +38,7 @@ class FileForm(forms.ModelForm):
             'project': forms.HiddenInput(),
             'version': forms.TextInput(attrs={'placeholder': '1.2.3'}),
             'compatible': forms.SelectMultiple(),
-            'document': forms.FileInput(attrs={'accept': '.tar.gz,.tar.bz2,.tar.xz,.zip'}),
+            'document': forms.ClearableFileInput(attrs={'accept': '.tar.gz,.tar.bz2,.tar.xz,.zip', 'class': 'btn btn-default btn-file'}),
             'changelog': forms.Textarea(attrs={'placeholder': 'Write changelog about this version'}),
         }
 
