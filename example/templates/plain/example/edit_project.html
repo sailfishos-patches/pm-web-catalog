@@ -40,6 +40,5 @@ Project: {{ project_name }}
   {% bootstrap_button "Upload file" button_type="submit" button_class="btn-primary" name="file-upload" %}
 </form></p>
 <p><a href="{% url 'delete_project' project_form.instance.name %}">Delete project</a></p>
-<p><a href="{% url 'home' %}">Return to home</a></p>
 </div>
 {% endblock %}

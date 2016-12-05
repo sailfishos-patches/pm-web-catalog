@@ -1,47 +1,54 @@
 {% load bootstrap3 %}
 {% bootstrap_css %}
-{% bootstrap_javascript %}
 
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block head_title %}{% endblock %}</title>
     {% block extra_head %}
     {% endblock %}
   </head>
-{% block bootstrap3_content %}
   <body>
     {% block body %}
-    {% if messages %}
-    <div>
-      <strong>Messages:</strong>
-      <ul>
-	{% for message in messages %}
-	<li>{{message}}</li>
-	{% endfor %}
-      </ul>
-    </div>
-    {% endif %}
-
-    <div>
-      <strong>Menu:</strong>
-      <ul>
-  <li><a href="{% url 'helpme_page' %}">Documentation (kinda)</a></li>
-  <li><a href="{% url 'view_projects' %}">All projects</a></li>
-	{% if user.is_authenticated %}
-  <li><a href="{% url 'view_user_projects' user.username %}">Your projects</a></li>
-  <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
-  {% else %}
-  <li><a href="{% url 'account_login' %}">Sign In</a></li>
-  <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
-  {% endif %}
-      </ul>
-    </div>
+    {% bootstrap_messages %}
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Patchmanager 2.0</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="{% url 'helpme_page' %}">Documentation (kinda)</a></li>
+            <li><a href="{% url 'view_projects' %}">All projects</a></li>
+          	{% if user.is_authenticated %}
+            <li><a href="{% url 'view_user_projects' user.username %}">Your projects</a></li>
+            {% endif %}
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+            {% else %}
+            <li><a href="{% url 'account_login' %}">Sign In</a></li>
+            <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
     {% block content %}
-    {% endblock %}
     {% endblock %}
     {% block extra_body %}
     {% endblock %}
-{% endblock %}
+    {% endblock %}
+    </div>
+    {% bootstrap_javascript jquery=1 %}
   </body>
 </html>
