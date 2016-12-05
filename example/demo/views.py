@@ -1,11 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
-from django.core.exceptions import ValidationError
 
 from example.demo.models import *
 from example.demo.forms import *
-from example.demo.filehandler import *
 
 
 def model_form_upload(request):
@@ -74,8 +72,10 @@ def delete_project(request, project):
 def edit_project(request, project):
     item = ProjectsModel.objects.get(name=project)
     files = FilesModel.objects.filter(project=project)
+    screenshots_objects = ScreenshotsModel.objects.filter(project=project)
     project_form = ProjectEditForm(instance=item)
     upload_form = FileForm(initial={'author': request.user.username, 'project': project})
+    screenshot_form = ScreenshotForm(initial={'project': project})
     if request.user.is_authenticated and request.user.username == item.author and request.method == 'POST':
         if 'file-edit' in request.POST:
             file_form = FileForm(request.POST, instance=FilesModel.objects.get(id=request.POST.get('fileid')))
@@ -90,30 +90,40 @@ def edit_project(request, project):
             if fs.exists(file_object.document.name):
                 fs.delete(file_object.document.name)
         elif 'project-edit' in request.POST:
-            project_form = ProjectEditForm(request.POST, instance=item)
+            project_form = ProjectEditForm(request.POST, request.FILES, instance=item)
             if project_form.is_valid():
                 project_form.save()
                 return redirect('view_project', project)
         elif 'file-upload' in request.POST:
             upload_form = FileForm(request.POST, request.FILES)
             if upload_form.is_valid():
-                uploaded = upload_form.save()
-                valid, message, content = ArchiveVerifier(uploaded.document.name).is_valid()
-                if not valid:
-                    uploaded.delete()
-                    fs = FileSystemStorage()
-                    if fs.exists(uploaded.document.name):
-                        fs.delete(uploaded.document.name)
-                    return render(request, 'upload_error.html', {
-                        'project': item,
-                        'message': message,
-                        'content': content,
-                    })
+                upload_form.save()
                 return redirect('edit_project', project)
+        elif 'screenshot-upload' in request.POST:
+            screenshot_form = ScreenshotForm(request.POST, request.FILES)
+            if screenshot_form.is_valid():
+                screenshots = request.FILES.getlist('screenshot')
+                for screenshot in screenshots:
+                    instance = ScreenshotsModel(
+                        project=project,
+                        filename=screenshot.name,
+                        screenshot=screenshot
+                    )
+                    instance.save()
+                return redirect('edit_project', project)
+        elif 'screenshot-delete' in request.POST:
+            screenshot_object = ScreenshotsModel.objects.get(id=request.POST.get('screenshotid'))
+            screenshot_object.delete()
+            fs = FileSystemStorage()
+            if fs.exists(screenshot_object.screenshot.name):
+                fs.delete(screenshot_object.screenshot.name)
+            screenshots_objects = ScreenshotsModel.objects.filter(project=project)
     return render(request, 'edit_project.html', {
         'files_forms': [FileEditForm(instance=file) for file in files],
         'project_form': project_form,
-        'upload_form': upload_form
+        'upload_form': upload_form,
+        'screenshots': screenshots_objects,
+        'screenshot_form': screenshot_form,
     })
 
 

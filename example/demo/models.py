@@ -1,15 +1,18 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.core.files.base import ContentFile
 from multiselectfield import MultiSelectField
 from django.core.exceptions import ValidationError
 from django.core.files.storage import FileSystemStorage
 import re
 
+from example.demo.filehandler import *
 
 
 class OverwriteStorage(FileSystemStorage):
     def get_available_name(self, name, max_length):
+        print('### name:', name)
         if self.exists(name):
             self.delete(name)
         return name
@@ -22,20 +25,20 @@ class ProjectsModel(models.Model):
 
     category_default = "others"
     category_choices = (
-        ("homescreen", "homescreen"),
-        ("browser", "browser"),
-        ("camera", "camera"),
-        ("calendar", "calendar"),
-        ("clock", "clock"),
-        ("contacts", "contacts"),
-        ("email", "email"),
-        ("gallery", "gallery"),
-        ("homescreen", "homescreen"),
-        ("media", "media"),
-        ("messages", "messages"),
-        ("phone", "phone"),
-        ("settings", "settings"),
-        ("others", "others")
+        ("homescreen", "Homescreen"),
+        ("browser", "Browser"),
+        ("camera", "Camera"),
+        ("calendar", "Calendar"),
+        ("clock", "Clock"),
+        ("contacts", "Contacts"),
+        ("email", "Email"),
+        ("gallery", "Gallery"),
+        ("homescreen", "Homescreen"),
+        ("media", "Media"),
+        ("messages", "Messages"),
+        ("phone", "Phone"),
+        ("settings", "Settings"),
+        ("others", "Others")
     )
 
     description = models.CharField(max_length=4096, blank=False)
@@ -49,6 +52,8 @@ class ProjectsModel(models.Model):
 
 
 extensions = ('.tar.gz', '.tar.xz', '.tar.bz2', '.zip')
+
+maximum_file_size = 1024 * 1024 * 16
 
 
 class FilesModel(models.Model):
@@ -71,6 +76,15 @@ class FilesModel(models.Model):
     def validate_file_type(upload):
         if not upload.name.lower().endswith(extensions):
             raise ValidationError('Unsupported file extension in: %s' % upload.name.lower())
+        if upload.file.size > maximum_file_size:
+            raise ValidationError('File is too large. Maximum allowed size is 16MB')
+        storage = FileSystemStorage()
+        f = storage.save('tmp/%s' % upload.name, ContentFile(upload.file.read()))
+        verified, message, content = ArchiveVerifier(f).is_valid()
+        if not verified:
+            if storage.exists(f):
+                storage.delete(f)
+            raise ValidationError(message)
 
     def validate_version(ver):
         if not re.match(r'^(\d+)\.(\d+)\.(\d+)$', ver):
@@ -84,3 +98,19 @@ class FilesModel(models.Model):
     compatible = MultiSelectField(blank=False, max_length=255, choices=compatible_choices, default=compatible_choices_default)
     activations = models.PositiveIntegerField(blank=True, default=0)
     changelog = models.CharField(max_length=512, blank=True)
+
+
+class ScreenshotsModel(models.Model):
+    def upload_screenshot_handler(instance, filename):
+        return 'screenshots/{project}-{filename}'.format(project=instance.project, filename=filename)
+
+    def validate_content_type(upload):
+        if not upload.file.content_type == 'image/png':
+            raise ValidationError('File content-type "%s" doesnt match image/png' % upload.file.content_type)
+        if upload.file.size > maximum_file_size:
+            raise ValidationError('File is too large. Maximum allowed size is 16MB')
+
+    fs = OverwriteStorage()
+    screenshot = models.FileField(storage=fs, upload_to=upload_screenshot_handler, validators=[validate_content_type])
+    filename = models.CharField(blank=True, max_length=255)
+    project = models.CharField(blank=True, max_length=255)

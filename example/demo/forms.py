@@ -9,8 +9,8 @@ class ProjectForm(forms.ModelForm):
         fields = ('name', 'display_name', 'description', 'author', 'category')
         widgets = {
             'author': forms.HiddenInput(),
-            'name': forms.TextInput(attrs={'placeholder': 'internal name'}),
-            'display_name': forms.TextInput(attrs={'placeholder': 'displayed name'}),
+            'name': forms.TextInput(attrs={'placeholder': 'Internal name'}),
+            'display_name': forms.TextInput(attrs={'placeholder': 'Displayed (pretty) name'}),
             'description': forms.Textarea(attrs={'placeholder': 'Write patch description here'}),
             'category': forms.Select(),
         }
@@ -23,7 +23,7 @@ class ProjectEditForm(forms.ModelForm):
         widgets = {
             'name': forms.HiddenInput(),
             'author': forms.HiddenInput(),
-            'display_name': forms.TextInput(attrs={'placeholder': 'displayed name'}),
+            'display_name': forms.TextInput(attrs={'placeholder': 'Displayed (pretty) name'}),
             'description': forms.Textarea(attrs={'placeholder': 'Write patch description here'}),
             'category': forms.Select(),
         }
@@ -54,4 +54,13 @@ class FileEditForm(forms.ModelForm):
             'document': forms.HiddenInput(),
             'compatible': forms.SelectMultiple(),
             'changelog': forms.Textarea(attrs={'placeholder': 'Write changelog about this version'}),
+        }
+
+
+class ScreenshotForm(forms.ModelForm):
+    class Meta:
+        model = ScreenshotsModel
+        fields = ('screenshot',)
+        widgets = {
+            'screenshot': forms.ClearableFileInput(attrs={'multiple': True, 'accept': '.png', 'class': 'btn btn-default btn-file'}),
         }

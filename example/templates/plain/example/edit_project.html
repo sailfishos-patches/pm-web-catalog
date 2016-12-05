@@ -8,11 +8,33 @@ Project: {{ project_name }}
 {% block content %}
 <div>
 <p>Name: {{ project_form.instance.name }}</p>
-<form method="post" enctype="multipart/form-data">
+<p><form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   {% bootstrap_form project_form %}
   {% bootstrap_button "Save project" button_type="submit" button_class="btn-primary" name="project-edit" %}
-</form>
+</form></p>
+<p><form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% bootstrap_form screenshot_form %}
+  {% bootstrap_button "Upload screenshot" button_type="submit" button_class="btn-primary" name="screenshot-upload" %}
+</form></p>
+{% if screenshots %}
+<div class="row">
+{% for screenshot in screenshots %}
+  <div class="col-xs-6 col-md-3">
+    <div class="thumbnail">
+      <a href="/media/{{ screenshot.screenshot.name }}"><img src="/media/{{ screenshot.screenshot.name }}" alt="{{ screenshot.filename }}"></a>
+      <p>{{ screenshot.filename }}</p>
+      <form method="post" action="#">
+        {% csrf_token %}
+        <input name="screenshotid" type="hidden" value="{{ screenshot.id }}">
+        {% bootstrap_button "Delete" button_type="submit" button_class="btn-danger" name="screenshot-delete" %}
+      </form>
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% endif %}
 {% if files_forms %}
 <p>Files:</p>
 <ul>
@@ -33,7 +55,7 @@ Project: {{ project_name }}
 {% else %}
 <p>No files here!</p>
 {% endif %}
-<p>Upload new file (*.tar.gz, *.tar.xz, *.tar.bz2):</p>
+<p>Upload new file (*.tar.gz, *.tar.xz, *.tar.bz2, *.zip):</p>
 <p><form method="post" enctype="multipart/form-data" {% if layout != 'vertical' %}class="form-{{ layout }}"{% endif %}>
   {% csrf_token %}
   {% bootstrap_form upload_form layout=layout %}

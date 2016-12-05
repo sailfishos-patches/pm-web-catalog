@@ -22,7 +22,7 @@ Projects
 <ul>
   {% for obj in documents %}
   <li>
-    <a href="{% url 'view_project' obj.name %}">{{ obj.name }}</a>
+    <a href="{% url 'view_project' obj.name %}">{{ obj.display_name }}</a>
     <p><small>Description: {{ obj.description | truncatelines:3 | linebreaksbr }}</small></p>
     <p><small>Author: <a href="{% url 'view_user_projects' obj.author %}">{{ obj.author }}</a></small></p>
     <p><small>Updated at: {{ obj.last_updated }}</small></p>
