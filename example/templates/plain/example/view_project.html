@@ -15,6 +15,17 @@ Project: {{ project.name }}
 <p><small>Description: {{ project.description | linebreaksbr }}</small></p>
 <p><small>Rating: {{ project.rating }}</small></p>
 <p><small>Total activations: {{ project.total_activations }}</small></p>
+{% if screenshots %}
+<div class="row">
+{% for screenshot in screenshots %}
+  <div class="col-xs-6 col-md-3">
+    <div class="thumbnail">
+      <a href="/media/{{ screenshot.screenshot.name }}"><img src="/media/{{ screenshot.screenshot.name }}" alt="{{ screenshot.filename }}"></a>
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% endif %}
 {% if files %}
 <p>Files:</p>
 <ul>

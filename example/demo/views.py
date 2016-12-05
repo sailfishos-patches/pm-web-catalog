@@ -45,9 +45,11 @@ def view_project(request, project):
     try:
         item = ProjectsModel.objects.get(name=project)
         files = FilesModel.objects.filter(project=project)
+        screenshots_objects = ScreenshotsModel.objects.filter(project=project)
         return render(request, 'view_project.html', {
             'project': item,
             'files': files,
+            'screenshots': screenshots_objects,
         })
     except:
         return redirect('view_projects')
