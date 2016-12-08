@@ -12,6 +12,9 @@ Project: {{ project.name }}
 <p>Display name: {{ project.display_name }}</p>
 <p><small>Author: <a href="{% url 'view_user_projects' project.author %}">{{ project.author }}</a></small></p>
 <p><small>Updated at: {{ project.last_updated }}</small></p>
+{% if project.discussion %}<p><small><a href="{{ project.discussion }}">Discussion</a></small></p>{% endif %}
+{% if project.donations %}<p><small><a href="{{ project.donations }}">Donate</a></small></p>{% endif %}
+{% if project.sources %}<p><small><a href="{{ project.sources }}">Sources</a></small></p>{% endif %}
 <p><small>Description: {{ project.description | linebreaksbr }}</small></p>
 <p><small>Rating: {{ project.rating }}</small></p>
 <p><small>Total activations: {{ project.total_activations }}</small></p>

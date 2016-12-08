@@ -21,7 +21,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Patchmanager 2.0</a>
+          <a class="navbar-brand" href="{% url 'home' %}">Patchmanager 2.0</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
@@ -32,7 +32,10 @@
             {% endif %}
           </ul>
           <ul class="nav navbar-nav navbar-right">
+            {% block extra_auth_navbar %}
+            {% endblock %}
             {% if user.is_authenticated %}
+            <li><a href="{% url 'account_email' %}">Account</a></li>
             <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
             {% else %}
             <li><a href="{% url 'account_login' %}">Sign In</a></li>
@@ -43,11 +46,11 @@
       </div>
     </nav>
     <div class="container">
-    {% block content %}
-    {% endblock %}
-    {% block extra_body %}
-    {% endblock %}
-    {% endblock %}
+      {% block content %}
+      {% endblock %}
+      {% block extra_body %}
+      {% endblock %}
+      {% endblock %}
     </div>
     {% bootstrap_javascript jquery=1 %}
   </body>

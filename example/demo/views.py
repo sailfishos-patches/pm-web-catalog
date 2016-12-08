@@ -10,19 +10,30 @@ def model_form_upload(request):
     if request.method == 'POST':
         project_form = ProjectForm(request.POST, prefix="prj")
         file_form = FileForm(request.POST, request.FILES, prefix="fls")
-        if project_form.is_valid() and file_form.is_valid():
+        screenshot_form = ScreenshotForm(request.POST, request.FILES, prefix="scr")
+        if project_form.is_valid() and file_form.is_valid() and screenshot_form.is_valid():
             project = project_form.save(commit=False)
             file = file_form.save(commit=False)
             file.project = project.name
             project.save()
             file.save()
+            screenshots = request.FILES.getlist('scr-screenshot')
+            for screenshot in screenshots:
+                instance = ScreenshotsModel(
+                    project=project.name,
+                    filename=screenshot.name,
+                    screenshot=screenshot
+                )
+                instance.save()
             return redirect('view_user_projects', request.user.username)
     else:
         project_form = ProjectForm(initial={'author': request.user.username}, prefix="prj")
         file_form = FileForm(initial={'author': request.user.username}, prefix="fls")
+        screenshot_form = ScreenshotForm(prefix="scr")
     return render(request, 'model_form_upload.html', {
         'project_form': project_form,
         'file_form': file_form,
+        'screenshot_form': screenshot_form,
     })
 
 
@@ -63,8 +74,16 @@ def delete_project(request, project):
     if request.method == 'POST':
         if request.user.is_authenticated and request.user.username == item.author:
             files = FilesModel.objects.filter(project=project)
+            screenshots = ScreenshotsModel.objects.filter(project=project)
+            fs = FileSystemStorage()
+            if fs.exists(files.values()[0]['document']):
+                fs.delete(files.values()[0]['document'])
+            for screenshot in screenshots.values():
+                if fs.exists(screenshot['screenshot']):
+                    fs.delete(screenshot['screenshot'])
             item.delete()
             files.delete()
+            screenshots.delete()
         return redirect('view_user_projects', request.user.username)
     return render(request, 'delete_project.html', {
         'project': item,
@@ -162,13 +181,26 @@ def api_project(request):
             rating = project_item.rating
         return JsonResponse({'status': status, 'project': project, 'rating': rating})
     else:
+        version = False
+        if 'version' in attrs:
+            version = attrs.pop('version')
         project_query = ProjectsModel.objects.filter(**attrs)
         status = project_query.exists()
         objects = {}
         if status and project_query.count() == 1:
             objects = project_query.values()[0]
-            files = FilesModel.objects.filter(project=objects['name']).values()
-            objects['files'] = list(files)
+            if version:
+                files = FilesModel.objects.filter(project=objects['name'], version=version)
+                if files.exists() and files.count() == 1:
+                    objects['version'] = version
+                    objects['compatible'] = files.values()[0]['compatible']
+                objects.pop('total_activations')
+                objects.pop('rating')
+            else:
+                files = FilesModel.objects.filter(project=objects['name']).values()
+                screenshots = ScreenshotsModel.objects.filter(project=objects['name']).values()
+                objects['files'] = list(files)
+                objects['screenshots'] = list(screenshots)
         return JsonResponse(objects, safe=False)
 
 

@@ -7,7 +7,7 @@
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
 
-{% block content %}
+{% block account_content %}
 
 <h1>{% trans "Sign In" %}</h1>
 
@@ -31,7 +31,6 @@ below:{% endblocktrans %}</p>
 {% include "socialaccount/snippets/login_extra.html" %}
 
 {% endif %}
-
 <form class="login" method="POST" action="{% url 'account_login' %}">
   {% csrf_token %}
   {% bootstrap_form form %}

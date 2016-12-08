@@ -54,7 +54,7 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
-LOCALE_PATHS = ( os.path.join(PROJECT_ROOT, 'locale'), )
+LOCALE_PATHS = (os.path.join(PROJECT_ROOT, 'locale'), )
 
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
@@ -96,10 +96,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            # allauth templates: you could copy this directory into your
-            # project and tweak it according to your needs
-            # os.path.join(PROJECT_ROOT, 'templates', 'uniform', 'allauth'),
-            # example project specific templates
             os.path.join(BASE_DIR, 'templates', 'bootstrap', 'allauth'),
             os.path.join(BASE_DIR, 'templates', 'plain', 'example'),
         ],

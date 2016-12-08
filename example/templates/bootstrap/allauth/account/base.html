@@ -1,21 +1,23 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
 
 {% load i18n %}
 
+{% block extra_auth_navbar %}
+{% if user.is_authenticated %}
+<li><a href="{% url 'account_change_password' %}">{% trans 'Change Password' %}</a></li>
+{% url 'socialaccount_connections' as connections_url %}
+{% if connections_url %}
+<li><a href="{{ connections_url }}">{% trans 'Connected Accounts' %}</a></li>
+{% endif %}
+{% endif %}
+{% endblock %}
+
 {% block content %}
+<div class="col-md-4 col-xs-12 col-sm-6">
 
-<h1>{% trans 'My Account' %}</h1>
-
+{% comment %}
 <ul class="nav nav-tabs">
-  <li class="{% block account_nav_email %}{% endblock %}">
-    <a href="{% url 'account_email' %}">{% trans 'E-mail Addresses' %}</a>
-  </li>
-  <li class="{% block account_nav_change_password %}{% endblock %}">
-    <a href="{% url 'account_change_password' %}">{% trans 'Change Password' %}</a>
-  </li>
   {% url 'socialaccount_connections' as connections_url %}
   {% if connections_url %}
   <li class="{% block account_nav_socialaccount_connections %}{% endblock %}">
@@ -23,7 +25,9 @@
   </li>
   {% endif %}
 </ul>
+{% endcomment %}
 {% block account_content %}
 {% endblock %}
 
+</div>
 {% endblock %}

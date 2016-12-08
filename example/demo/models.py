@@ -49,6 +49,9 @@ class ProjectsModel(models.Model):
     author = models.CharField(blank=True, max_length=255)
     rating = models.IntegerField(blank=True, default=0)
     total_activations = models.PositiveIntegerField(blank=True, default=0)
+    discussion = models.CharField(blank=True, max_length=255)
+    donations = models.CharField(blank=True, max_length=255)
+    sources = models.CharField(blank=True, max_length=255)
 
 
 extensions = ('.tar.gz', '.tar.xz', '.tar.bz2', '.zip')
@@ -70,7 +73,7 @@ class FilesModel(models.Model):
         ("1.1.9.30", "1.1.9.30"),
         ("2.0.2.51", "2.0.2.51"),
         ("2.0.4.14", "2.0.4.14"),
-        ("2.0.5.4", "2.0.5.4")
+        ("2.0.5.6", "2.0.5.6")
     )
 
     def validate_file_type(upload):

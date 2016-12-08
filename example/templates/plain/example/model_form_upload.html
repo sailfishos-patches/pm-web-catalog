@@ -10,6 +10,7 @@ Create new project
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   {% bootstrap_form project_form %}
+  {% bootstrap_form screenshot_form %}
   {% bootstrap_form file_form %}
   {% bootstrap_button "Upload" button_type="submit" button_class="btn-primary" %}
 </form>
