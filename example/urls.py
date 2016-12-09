@@ -22,7 +22,6 @@ urlpatterns = [
     url(r'^project/(.*)$', views.view_project, name='view_project'),
 # API
     url(r'^api/projects$', views.api_projects),
-    url(r'^api/rating$', views.api_rating),
     url(r'^api/project$', views.api_project),
     url(r'^api/files$', views.api_files),
 ]

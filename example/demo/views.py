@@ -169,17 +169,37 @@ def api_project(request):
         project = attrs.get('name') if 'name' in attrs else ''
         project_query = ProjectsModel.objects.filter(name=project)
         status = project_query.exists()
-        rating = 0
-        if status:
-            project_item = project_query.get()
-            if action == 'upvote':
-                project_item.rating += 1
+        if action == 'activation' or action == 'deactivation':
+            version = attrs.get('version') if 'version' in attrs else ''
+            files_query = FilesModel.objects.filter(project=project, version=version)
+            count = 0
+            status &= files_query.exists()
+            if status:
+                file_item = files_query.get()
+                project_item = project_query.get()
+                if action == 'activation':
+                    file_item.activations += 1
+                    project_item.total_activations += 1
+                elif action == 'deactivation':
+                    file_item.activations -= 1
+                    project_item.total_activations -= 1
+                file_item.save()
                 project_item.save()
-            elif action == 'downvote':
-                project_item.rating -= 1
-                project_item.save()
-            rating = project_item.rating
-        return JsonResponse({'status': status, 'project': project, 'rating': rating})
+                count = file_item.activations
+            objects = {'status': status, 'name': project, 'version': version, 'count': count}
+        else:
+            rating = 0
+            if status:
+                project_item = project_query.get()
+                if action == 'upvote':
+                    project_item.rating += 1
+                    project_item.save()
+                elif action == 'downvote':
+                    project_item.rating -= 1
+                    project_item.save()
+                rating = project_item.rating
+            objects = {'status': status, 'project': project, 'rating': rating}
+        return JsonResponse(objects)
     else:
         version = False
         if 'version' in attrs:
@@ -202,25 +222,6 @@ def api_project(request):
                 objects['files'] = list(files)
                 objects['screenshots'] = list(screenshots)
         return JsonResponse(objects, safe=False)
-
-
-def api_rating(request):
-    attrs = getattr(request, request.method)
-    action = attrs.get('action') if 'action' in attrs else ''
-    project = attrs.get('project') if 'project' in attrs else ''
-    project_query = ProjectsModel.objects.filter(name=project)
-    status = project_query.exists()
-    rating = 0
-    if status:
-        project_item = project_query.get()
-        if action == 'upvote':
-            project_item.rating += 1
-            project_item.save()
-        elif action == 'downvote':
-            project_item.rating -= 1
-            project_item.save()
-        rating = project_item.rating
-    return JsonResponse({'status': status, 'project': project, 'rating': rating})
 
 
 def api_files(request):
