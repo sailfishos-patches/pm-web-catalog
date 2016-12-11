@@ -114,6 +114,6 @@ class ScreenshotsModel(models.Model):
             raise ValidationError('File is too large. Maximum allowed size is 16MB')
 
     fs = OverwriteStorage()
-    screenshot = models.FileField(storage=fs, upload_to=upload_screenshot_handler, validators=[validate_content_type])
+    screenshot = models.FileField(blank=True, storage=fs, upload_to=upload_screenshot_handler, validators=[validate_content_type])
     filename = models.CharField(blank=True, max_length=255)
     project = models.CharField(blank=True, max_length=255)

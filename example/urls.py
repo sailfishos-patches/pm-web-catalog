@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^api/projects$', views.api_projects),
     url(r'^api/project$', views.api_project),
     url(r'^api/files$', views.api_files),
+    url(r'^api/easter$', views.api_easter),
 ]
 
 if settings.DEBUG:
