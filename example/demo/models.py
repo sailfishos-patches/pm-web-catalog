@@ -12,7 +12,6 @@ from example.demo.filehandler import *
 
 class OverwriteStorage(FileSystemStorage):
     def get_available_name(self, name, max_length):
-        print('### name:', name)
         if self.exists(name):
             self.delete(name)
         return name
@@ -84,9 +83,9 @@ class FilesModel(models.Model):
         storage = FileSystemStorage()
         f = storage.save('tmp/%s' % upload.name, ContentFile(upload.file.read()))
         verified, message, content = ArchiveVerifier(f).is_valid()
+        if storage.exists(f):
+            storage.delete(f)
         if not verified:
-            if storage.exists(f):
-                storage.delete(f)
             raise ValidationError(message)
 
     def validate_version(ver):
