@@ -6,7 +6,7 @@ Delete project: {{ project.name }}
 {% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}{% if project.author == user.username %}
+{% if user.is_authenticated %}{% if project.author == user.username or user.is_staff %}
 <p>You really want to delete project <b>{{ project.name }}</b>?</p>
 <p><form method="post" action="">
   {% csrf_token %}

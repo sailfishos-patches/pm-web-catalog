@@ -72,7 +72,7 @@ def delete_project(request, project):
     except:
         return redirect('view_user_projects', request.user.username)
     if request.method == 'POST':
-        if request.user.is_authenticated and request.user.username == item.author:
+        if request.user.is_authenticated and request.user.username == item.author or request.user.is_staff:
             files = FilesModel.objects.filter(project=project)
             screenshots = ScreenshotsModel.objects.filter(project=project)
             fs = FileSystemStorage()
@@ -97,7 +97,7 @@ def edit_project(request, project):
     project_form = ProjectEditForm(instance=item)
     upload_form = FileForm(initial={'author': request.user.username, 'project': project})
     screenshot_form = ScreenshotForm(initial={'project': project})
-    if request.user.is_authenticated and request.user.username == item.author and request.method == 'POST':
+    if request.user.is_authenticated and (request.user.username == item.author or request.user.is_staff) and request.method == 'POST':
         if 'file-edit' in request.POST:
             file_form = FileForm(request.POST, instance=FilesModel.objects.get(id=request.POST.get('fileid')))
             if file_form.is_valid():

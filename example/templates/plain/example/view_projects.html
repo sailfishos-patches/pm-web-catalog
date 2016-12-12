@@ -10,7 +10,7 @@ Projects
 {% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}{% if author == user.username %}
+{% if user.is_authenticated %}{% if author == user.username or user.is_staff %}
 <a href="{% url 'model_form_upload' %}">Create new project</a>
 {% endif %}{% endif %}
 {% if documents %}
