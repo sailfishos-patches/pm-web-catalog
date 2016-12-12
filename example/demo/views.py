@@ -109,6 +109,8 @@ def edit_project(request, project):
                 return redirect('view_project', project)
         elif 'file-delete' in request.POST:
             file_object = FilesModel.objects.get(id=request.POST.get('fileid'))
+            formid = int(request.POST.get('formid'))
+            files_forms.pop(formid)
             file_object.delete()
             fs = FileSystemStorage()
             if fs.exists(file_object.document.name):
