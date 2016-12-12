@@ -40,12 +40,12 @@ Project: {{ project_name }}
 <ul>
 {% for file_form in files_forms %}
   <li>
-    <p><form method="post" action="#">
+    <p><form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <p>Version: {{ file_form.instance.version }}</p>
       {% bootstrap_form file_form %}
-      <p>Document: <a href="{{ file_form.instance.document.url }}">{{ file_form.instance.document.name }}</a></p>
       <input name="fileid" type="hidden" value="{{ file_form.instance.id }}">
+      <input name="formid" type="hidden" value="{{ forloop.counter0 }}">
       {% bootstrap_button "Save file" button_type="submit" button_class="btn-primary" name="file-edit" %}
       {% bootstrap_button "Delete file" button_type="submit" button_class="btn-danger" name="file-delete" %}
     </form></p>

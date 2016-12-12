@@ -93,13 +93,16 @@ def delete_project(request, project):
 def edit_project(request, project):
     item = ProjectsModel.objects.get(name=project)
     files = FilesModel.objects.filter(project=project)
+    files_forms = [FileEditForm(instance=file) for file in files]
     screenshots_objects = ScreenshotsModel.objects.filter(project=project)
     project_form = ProjectEditForm(instance=item)
     upload_form = FileForm(initial={'author': request.user.username, 'project': project})
     screenshot_form = ScreenshotForm(initial={'project': project})
     if request.user.is_authenticated and (request.user.username == item.author or request.user.is_staff) and request.method == 'POST':
         if 'file-edit' in request.POST:
-            file_form = FileForm(request.POST, instance=FilesModel.objects.get(id=request.POST.get('fileid')))
+            file_form = FileEditForm(request.POST, request.FILES, instance=FilesModel.objects.get(id=request.POST.get('fileid')))
+            formid = int(request.POST.get('formid'))
+            files_forms[formid] = file_form
             if file_form.is_valid():
                 file_form.save()
                 item.save()
@@ -111,7 +114,7 @@ def edit_project(request, project):
             if fs.exists(file_object.document.name):
                 fs.delete(file_object.document.name)
         elif 'project-edit' in request.POST:
-            project_form = ProjectEditForm(request.POST, request.FILES, instance=item)
+            project_form = ProjectEditForm(request.POST, instance=item)
             if project_form.is_valid():
                 project_form.save()
                 return redirect('view_project', project)
@@ -140,7 +143,7 @@ def edit_project(request, project):
                 fs.delete(screenshot_object.screenshot.name)
             screenshots_objects = ScreenshotsModel.objects.filter(project=project)
     return render(request, 'edit_project.html', {
-        'files_forms': [FileEditForm(instance=file) for file in files],
+        'files_forms': files_forms,
         'project_form': project_form,
         'upload_form': upload_form,
         'screenshots': screenshots_objects,

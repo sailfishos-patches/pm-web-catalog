@@ -71,7 +71,7 @@ class FileEditForm(forms.ModelForm):
             'author': forms.HiddenInput(),
             'version': forms.HiddenInput(),
             'project': forms.HiddenInput(),
-            'document': forms.HiddenInput(),
+            'document': forms.ClearableFileInput(attrs={'accept': '.tar.gz,.tar.bz2,.tar.xz,.zip', 'class': 'btn btn-default btn-file'}),
             'compatible': forms.SelectMultiple(),
             'changelog': forms.Textarea(attrs={'placeholder': 'Write changelog about this version'}),
         }
