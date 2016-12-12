@@ -5,15 +5,25 @@ Patchmanager2 Documentation (kinda)
 {% endblock %}
 
 {% block content %}
-<p>Verifications for input fields:</p>
-<p>Name can contain only alphanumeric chars, underscore and hyphen. Name value is only used internally. For pretty name use Display name field. Available chars are 'a-z' 'A-Z' '0-9' '-' and '_'
-<br>Version should contain three numbers dot separated. Example: 1.2.3
-<br>Valid patch file extensions are: .zip .tar.gz .tar.bz2 .tar.xz</p>
-<p>Patch file validation:</p>
-<p>Patch file should contain three files:
-<br> - unified_diff.patch - patch file
-<br> - main.png - patch icon, displayed in catalog application
-<br> - main.qml - patch main page with information and configuration
-<br> It's allowed to have extra files with extensions: '.qml' '.js' '.png' '.svg' '.qm'</p>
-<p>Translations qm files should be named "translation_LANG.qm"</p>
+<h1>Patch verification</h1>
+<p>Archive verification:</p>
+  <ul>
+    <li>Patch file allowed extensions are: .zip .tar.gz .tar.bz2 .tar.xz</li>
+    <li>Patch file should contain unified_diff.patch</li>
+  </ul>
+<p>Allowed extra content:</p>
+  <ul>
+    <li>Allowed to have extra files with extensions: '.qml' '.js' '.png' '.svg' '.qm'</li>
+    <li>Patch translation qm files should be named "translation_LANG.qm"</li>
+    <li>Optional patch file icon should be named main.png</li>
+    <li>Optional patch settings entry file should be named main.qml
+    <br>You can push as many extra pages from your main qml. All extra files are located in same directory</li>
+  </ul>
+<p>Project fields verification:</p>
+  <ul>
+    <li>Name field can contain only alphanumeric chars, underscore and hyphen.
+    <br>Available chars are 'a-z' 'A-Z' '0-9' '-' and '_'
+    <br>Name value is only used internally. For pretty name use Display name field.</li>
+    <li>Version should contain three numbers dot separated. Example: 1.2.3</li>
+  </ul>
 {% endblock %}
