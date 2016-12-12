@@ -76,11 +76,14 @@ def delete_project(request, project):
             files = FilesModel.objects.filter(project=project)
             screenshots = ScreenshotsModel.objects.filter(project=project)
             fs = FileSystemStorage()
-            if fs.exists(files.values()[0]['document']):
-                fs.delete(files.values()[0]['document'])
-            for screenshot in screenshots.values():
-                if fs.exists(screenshot['screenshot']):
-                    fs.delete(screenshot['screenshot'])
+            if files.exists():
+                for file in files.values():
+                    if fs.exists(files['document']):
+                        fs.delete(file['document'])
+            if screenshots.exists():
+                for screenshot in screenshots.values():
+                    if fs.exists(screenshot['screenshot']):
+                        fs.delete(screenshot['screenshot'])
             item.delete()
             files.delete()
             screenshots.delete()
