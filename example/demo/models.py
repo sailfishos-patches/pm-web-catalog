@@ -96,7 +96,7 @@ class FilesModel(models.Model):
     author = models.CharField(blank=True, max_length=255)
     project = models.CharField(blank=True, max_length=255)
     document = models.FileField(storage=fs, upload_to=upload_path_handler, validators=[validate_file_type])
-    version = models.CharField(blank=False, unique=True, max_length=15, validators=[validate_version])
+    version = models.CharField(blank=False, max_length=15, validators=[validate_version])
     compatible = MultiSelectField(blank=False, max_length=255, choices=compatible_choices, default=compatible_choices_default)
     activations = models.PositiveIntegerField(blank=True, default=0)
     changelog = models.CharField(max_length=512, blank=True)

@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from example.demo.models import *
 
@@ -61,6 +62,16 @@ class FileForm(forms.ModelForm):
             'document': 'Patch archive',
             'compatible': 'Compatible versions',
         }
+
+    def clean(self):
+        cleaned_data = super(FileForm, self).clean()
+        project = cleaned_data.get('project')
+        version = cleaned_data.get('version')
+        exists = FilesModel.objects.filter(project=project, version=version).exists()
+        if exists:
+            raise ValidationError('Version value "%s" not unique' % cleaned_data.get('version'))
+        else:
+            return cleaned_data
 
 
 class FileEditForm(forms.ModelForm):
