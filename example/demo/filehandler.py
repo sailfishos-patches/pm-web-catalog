@@ -25,7 +25,7 @@ class ArchiveVerifier:
         content = self.list_archive()
         valid = True
         message = ""
-        options = ['unified_diff.patch', 'main.qml', 'main.png']
+        options = ['unified_diff.patch']
         extensions = ('.qml', '.js', '.png', '.svg', '.qm')
         for o in options:
             valid &= o in content
