@@ -5,6 +5,8 @@ from django.core.files.storage import FileSystemStorage
 from example.demo.models import *
 from example.demo.forms import *
 
+import random
+
 
 def model_form_upload(request):
     if request.method == 'POST':
