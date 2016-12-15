@@ -278,30 +278,60 @@ def api_files(request):
 
 
 def api_easter(request):
-    text = '''
-Case study: Sailfish Watch
+    text = '''What’ll we do with a drunken sailor,
+What’ll we do with a drunken sailor,
+What’ll we do with a drunken sailor,
+Earl-aye in the morning?
 
-Sailfish OS is known for smartphones, but it also forms an excellent base for many very different kinds of embedded devices. Sailfish OS is no longer the new kid on the block, and every port strengthens the operating system’s capability to scale. So far the operating system has been productized to four different devices including Jolla smartphone, Jolla Tablet, Intex Aqua Fish and Turing Phone, and ported to dozens of other phones and tablets by the Sailfish community.
+Way hay and up she rises,
+Way hay and up she rises,
+Way hay and up she rises,
+Earl-aye in the morning.
 
-Last month we did a quick exercise aiming to see how far we could get in a few weeks in porting Sailfish OS to a new kind of mobile device, an Android smartwatch. Compared to the competition, Sailfish OS’s interaction paradigm is particularly suited for small screens, it being gesture-driven and designed to maximize display estate available for the user content. We also had the watch demo with us as a teaser in Slush 2016 this week, to emphasize to journalists, partners and other people how versatile platform Sailfish OS is. And naturally an implementation like this, could fit nicely also into our licensing strategy.
+Shave his belly with a rusty razor,
+Shave his belly with a rusty razor,
+Shave his belly with a rusty razor,
+Earl-aye in the morning.
 
-Sailfish Watch
+Way hay and up she rises,
+Way hay and up she rises,
+Way hay and up she rises,
+Earl-aye in the morning.
 
-We inferred technical and design inspiration help from an existing smartwatch OS called Asteroid OS, led by Florent Revest, which shares a lot of the same core Mer and Nemo libraries with Sailfish OS, and goes to show how important and valuable support from the open source community is for us. Compatibility layer libHybris gives us quick access to existing Android hardware, and prototyping features is a breeze on top of the high-level QML APIs to the home screen, connectivity, profiles, power management, display, clock, calendar, weather and settings backends also powering features running on Sailfish OS smartphones. In addition Sailfish UI layer provides a toolkit of scalable common components, gestures, layouts, animations, icons, fonts and localization enablers for creating fluid and beautiful user experience.
+Put him in the long boat till he’s sober,
+Put him in the long boat till he’s sober,
+Put him in the long boat till he’s sober,
+Earl-aye in the morning.
 
-The main view is reserved for showing time as smartwatch is still a watch and a fashion accessory as well as a tech gadget.
+Way hay and up she rises,
+Way hay and up she rises,
+Way hay and up she rises,
+Earl-aye in the morning.
 
-Homescreen is organized in familiar Sailfish-style horizontal carousel with Events on the left, the main view on the center and fitness view promoted as the super app on the right.
+Put him in the scuppers with a hawse pipe on him,
+Put him in the scuppers with a hawse pipe on him,
+Put him in the scuppers with a hawse pipe on him,
+Earl-aye in the morning.
 
-Similarities with other Sailfish devices don’t end there. Apps can always be accessed from the bottom of the screen no matter where you are and ambiences from the top. The most important setting shortcuts are integrated right into Events.
+Way hay and up she rises,
+Way hay and up she rises,
+Way hay and up she rises,
+Earl-aye in the morning.
 
-Fitness and health tracking is arguably the most important feature in the current generation of wearables. In the fitness view you can track your daily activity levels. Tapping a progress circle turns the watch into a dedicated step or a calorie counter. With more time it could be extended to comprehensive health suite.
+Put him in bed with the captain’s daughter,
+Put him in bed with the captain’s daughter,
+Put him in bed with the captain’s daughter,
+Earl-aye in the morning.
 
-The watch is paired with Sailfish smartphone, which forwards calls and message notifications to the watch. User gets notified with a gentle vibration on the wrist, can quickly glance incoming events, easily dismiss incoming calls with a simple gesture, or transfer the call to his/her hands-free. In the prototype the connectivity is routed through WLAN as the low-power Bluetooth would have required a bit more porting time.
+Way hay and up she rises,
+Way hay and up she rises,
+Way hay and up she rises,
+Earl-aye in the morning.
 
-Device configuration and user preferences should automatically be transferred from the smartphone, but we implemented time and date settings as a proof-of-concept to see how easy it is to port traditional Sailfish views to a small screen. In a productized version the date picker of course would naturally be redesigned, but the ported one was already surprisingly usable.
-
-A final note related to Sailfish OS / Jolla products: if you are a Sailfish community member or a just a fan, you can be sure that we will continue to push for new Sailfish devices for our community. More info about that in the near future!
-'''
-    objects = {"status": True, "text": text}
+That’s what we do with a drunken Sailor,
+That’s what we do with a drunken Sailor,
+That’s what we do with a drunken Sailor,
+Earl-aye in the morning.'''
+    status = random.choice(range(10)) == 0
+    objects = {"status": status, "text": text}
     return JsonResponse(objects)
