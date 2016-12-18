@@ -80,7 +80,7 @@ def delete_project(request, project):
             fs = FileSystemStorage()
             if files.exists():
                 for file in files.values():
-                    if fs.exists(files['document']):
+                    if fs.exists(file['document']):
                         fs.delete(file['document'])
             if screenshots.exists():
                 for screenshot in screenshots.values():
