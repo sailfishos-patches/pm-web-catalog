@@ -168,7 +168,7 @@ def api_projects(request):
         names = set()
         [names.add(file['project']) for file in files]
         attrs['name__in'] = names
-    objects = ProjectsModel.objects.filter(**attrs)
+    objects = ProjectsModel.objects.filter(**attrs).order_by('category', 'display_name')
     return JsonResponse(list(objects.values()), safe=False)
 
 
