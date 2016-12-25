@@ -36,6 +36,7 @@ class ProjectsModel(models.Model):
         ("media", "Media"),
         ("messages", "Messages"),
         ("phone", "Phone"),
+        ("silica", "Silica"),
         ("settings", "Settings"),
         ("others", "Others")
     )
