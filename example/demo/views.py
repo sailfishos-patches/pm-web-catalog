@@ -55,8 +55,9 @@ def view_user_projects(request, user):
 
 
 def view_project(request, project):
-    try:
-        item = ProjectsModel.objects.get(name=project)
+    item = ProjectsModel.objects.filter(name=project)
+    if item.exists():
+        item = item.first()
         files = FilesModel.objects.filter(project=project)
         screenshots_objects = ScreenshotsModel.objects.filter(project=project)
         return render(request, 'view_project.html', {
@@ -64,17 +65,15 @@ def view_project(request, project):
             'files': files,
             'screenshots': screenshots_objects,
         })
-    except:
+    else:
         return redirect('view_projects')
 
 
 def delete_project(request, project):
-    try:
-        item = ProjectsModel.objects.get(name=project)
-    except:
-        return redirect('view_user_projects', request.user.username)
-    if request.method == 'POST':
-        if request.user.is_authenticated and request.user.username == item.author or request.user.is_staff:
+    item = ProjectsModel.objects.filter(name=project)
+    item = item.first() if item.exists() else False
+    if item and request.user.is_authenticated and (request.user.username == item.author or request.user.is_staff):
+        if request.method == 'POST':
             files = FilesModel.objects.filter(project=project)
             screenshots = ScreenshotsModel.objects.filter(project=project)
             fs = FileSystemStorage()
@@ -89,73 +88,81 @@ def delete_project(request, project):
             item.delete()
             files.delete()
             screenshots.delete()
+            return redirect('view_user_projects', request.user.username)
+        else:
+            return render(request, 'delete_project.html', {
+                'project': item,
+            })
+    else:
         return redirect('view_user_projects', request.user.username)
-    return render(request, 'delete_project.html', {
-        'project': item,
-    })
 
 
 def edit_project(request, project):
-    item = ProjectsModel.objects.get(name=project)
-    files = FilesModel.objects.filter(project=project)
-    files_forms = [FileEditForm(instance=file) for file in files]
-    screenshots_objects = ScreenshotsModel.objects.filter(project=project)
-    project_form = ProjectEditForm(instance=item)
-    upload_form = FileForm(initial={'author': request.user.username, 'project': project})
-    screenshot_form = ScreenshotForm(initial={'project': project})
-    if request.user.is_authenticated and (request.user.username == item.author or request.user.is_staff) and request.method == 'POST':
-        if 'file-edit' in request.POST:
-            file_form = FileEditForm(request.POST, request.FILES, instance=FilesModel.objects.get(id=request.POST.get('fileid')))
-            formid = int(request.POST.get('formid'))
-            files_forms[formid] = file_form
-            if file_form.is_valid():
-                file_form.save()
-                item.save()
-                return redirect('view_project', project)
-        elif 'file-delete' in request.POST:
-            file_object = FilesModel.objects.get(id=request.POST.get('fileid'))
-            formid = int(request.POST.get('formid'))
-            files_forms.pop(formid)
-            file_object.delete()
-            fs = FileSystemStorage()
-            if fs.exists(file_object.document.name):
-                fs.delete(file_object.document.name)
-        elif 'project-edit' in request.POST:
-            project_form = ProjectEditForm(request.POST, instance=item)
-            if project_form.is_valid():
-                project_form.save()
-                return redirect('view_project', project)
-        elif 'file-upload' in request.POST:
-            upload_form = FileForm(request.POST, request.FILES)
-            if upload_form.is_valid():
-                upload_form.save()
-                return redirect('edit_project', project)
-        elif 'screenshot-upload' in request.POST:
-            screenshot_form = ScreenshotForm(request.POST, request.FILES)
-            if screenshot_form.is_valid():
-                screenshots = request.FILES.getlist('screenshot')
-                for screenshot in screenshots:
-                    instance = ScreenshotsModel(
-                        project=project,
-                        filename=screenshot.name,
-                        screenshot=screenshot
-                    )
-                    instance.save()
-                return redirect('edit_project', project)
-        elif 'screenshot-delete' in request.POST:
-            screenshot_object = ScreenshotsModel.objects.get(id=request.POST.get('screenshotid'))
-            screenshot_object.delete()
-            fs = FileSystemStorage()
-            if fs.exists(screenshot_object.screenshot.name):
-                fs.delete(screenshot_object.screenshot.name)
-            screenshots_objects = ScreenshotsModel.objects.filter(project=project)
-    return render(request, 'edit_project.html', {
-        'files_forms': files_forms,
-        'project_form': project_form,
-        'upload_form': upload_form,
-        'screenshots': screenshots_objects,
-        'screenshot_form': screenshot_form,
-    })
+    item = ProjectsModel.objects.filter(name=project)
+    item = item.first() if item.exists() else False
+    if item and request.user.is_authenticated and (request.user.username == item.author or request.user.is_staff):
+        files = FilesModel.objects.filter(project=project)
+        files_forms = [FileEditForm(instance=file) for file in files]
+        screenshots_objects = ScreenshotsModel.objects.filter(project=project)
+        project_form = ProjectEditForm(instance=item)
+        upload_form = FileForm(initial={'author': request.user.username, 'project': project})
+        screenshot_form = ScreenshotForm(initial={'project': project})
+        if request.method == 'POST':
+            if 'file-edit' in request.POST:
+                file_form = FileEditForm(request.POST, request.FILES, instance=FilesModel.objects.get(id=request.POST.get('fileid')))
+                formid = int(request.POST.get('formid'))
+                files_forms[formid] = file_form
+                if file_form.is_valid():
+                    file_form.save()
+                    item.save()
+                    return redirect('view_project', project)
+            elif 'file-delete' in request.POST:
+                file_object = FilesModel.objects.get(id=request.POST.get('fileid'))
+                formid = int(request.POST.get('formid'))
+                files_forms.pop(formid)
+                file_object.delete()
+                fs = FileSystemStorage()
+                if fs.exists(file_object.document.name):
+                    fs.delete(file_object.document.name)
+            elif 'project-edit' in request.POST:
+                project_form = ProjectEditForm(request.POST, instance=item)
+                if project_form.is_valid():
+                    project_form.save()
+                    return redirect('view_project', project)
+            elif 'file-upload' in request.POST:
+                upload_form = FileForm(request.POST, request.FILES)
+                if upload_form.is_valid():
+                    upload_form.save()
+                    return redirect('edit_project', project)
+            elif 'screenshot-upload' in request.POST:
+                screenshot_form = ScreenshotForm(request.POST, request.FILES)
+                if screenshot_form.is_valid():
+                    screenshots = request.FILES.getlist('screenshot')
+                    for screenshot in screenshots:
+                        instance = ScreenshotsModel(
+                            project=project,
+                            filename=screenshot.name,
+                            screenshot=screenshot
+                        )
+                        instance.save()
+                    return redirect('edit_project', project)
+            elif 'screenshot-delete' in request.POST:
+                screenshot_object = ScreenshotsModel.objects.get(id=request.POST.get('screenshotid'))
+                screenshot_object.delete()
+                fs = FileSystemStorage()
+                if fs.exists(screenshot_object.screenshot.name):
+                    fs.delete(screenshot_object.screenshot.name)
+                screenshots_objects = ScreenshotsModel.objects.filter(project=project)
+        else:
+            return render(request, 'edit_project.html', {
+                'files_forms': files_forms,
+                'project_form': project_form,
+                'upload_form': upload_form,
+                'screenshots': screenshots_objects,
+                'screenshot_form': screenshot_form,
+            })
+    else:
+        return redirect('view_project', project)
 
 
 def api_projects(request):
