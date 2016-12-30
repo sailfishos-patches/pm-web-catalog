@@ -287,60 +287,64 @@ def api_files(request):
 
 
 def api_easter(request):
-    text = '''What’ll we do with a drunken sailor,
-What’ll we do with a drunken sailor,
-What’ll we do with a drunken sailor,
-Earl-aye in the morning?
+    text = '''No more champagne
+And the fireworks are through
+Here we are, me and you
+Feeling lost and feeling blue
+It's the end of the party
+And the morning seems so grey
+So unlike yesterday
+Now's the time for us to say
 
-Way hay and up she rises,
-Way hay and up she rises,
-Way hay and up she rises,
-Earl-aye in the morning.
+Happy New Year
+Happy New Year
+May we all have a vision now and then
+Of a world where every neighbor is a friend
+Happy New Year
+Happy New Year
+May we all have our hopes, our will to try
+If we don't we might as well lay down and die
+You and I
 
-Shave his belly with a rusty razor,
-Shave his belly with a rusty razor,
-Shave his belly with a rusty razor,
-Earl-aye in the morning.
+Sometimes I see
+How the brave new world arrives
+And I see how it thrives
+In the ashes of our lives
+Oh yes, man is a fool
+And he thinks he'll be okay
+Dragging on, feet of clay
+Never knowing he's astray
+Keeps on going anyway
 
-Way hay and up she rises,
-Way hay and up she rises,
-Way hay and up she rises,
-Earl-aye in the morning.
+Happy New Year
+Happy New Year
+May we all have a vision now and then
+Of a world where every neighbor is a friend
+Happy New Year
+Happy New Year
+May we all have our hopes, our will to try
+If we don't we might as well lay down and die
+You and I
 
-Put him in the long boat till he’s sober,
-Put him in the long boat till he’s sober,
-Put him in the long boat till he’s sober,
-Earl-aye in the morning.
+Seems to me now
+That the dreams we had before
+Are all dead, nothing more
+Than confetti on the floor
+It's the end of a decade
+In another ten years time
+Who can say what we'll find
+What lies waiting down the line
+In the end of eighty-nine
 
-Way hay and up she rises,
-Way hay and up she rises,
-Way hay and up she rises,
-Earl-aye in the morning.
-
-Put him in the scuppers with a hawse pipe on him,
-Put him in the scuppers with a hawse pipe on him,
-Put him in the scuppers with a hawse pipe on him,
-Earl-aye in the morning.
-
-Way hay and up she rises,
-Way hay and up she rises,
-Way hay and up she rises,
-Earl-aye in the morning.
-
-Put him in bed with the captain’s daughter,
-Put him in bed with the captain’s daughter,
-Put him in bed with the captain’s daughter,
-Earl-aye in the morning.
-
-Way hay and up she rises,
-Way hay and up she rises,
-Way hay and up she rises,
-Earl-aye in the morning.
-
-That’s what we do with a drunken Sailor,
-That’s what we do with a drunken Sailor,
-That’s what we do with a drunken Sailor,
-Earl-aye in the morning.'''
+Happy New Year
+Happy New Year
+May we all have a vision now and then
+Of a world where every neighbor is a friend
+Happy New Year
+Happy New Year
+May we all have our hopes, our will to try
+If we don't we might as well lay down and die
+You and I'''
     status = random.choice(range(10)) == 0
     objects = {"status": status, "text": text}
     return JsonResponse(objects)
