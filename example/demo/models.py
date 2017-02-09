@@ -68,12 +68,13 @@ class FilesModel(models.Model):
 
     fs = OverwriteStorage()
 
-    compatible_choices_default = "2.0.4.14"
+    compatible_choices_default = "2.1.0.9"
     compatible_choices = (
         ("1.1.9.30", "1.1.9.30"),
         ("2.0.2.51", "2.0.2.51"),
         ("2.0.4.14", "2.0.4.14"),
-        ("2.0.5.6", "2.0.5.6")
+        ("2.0.5.6", "2.0.5.6"),
+        ("2.1.0.9", "2.1.0.9")
     )
 
     def validate_file_type(upload):
