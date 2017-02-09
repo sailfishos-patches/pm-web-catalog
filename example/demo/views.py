@@ -287,64 +287,34 @@ def api_files(request):
 
 
 def api_easter(request):
-    text = '''No more champagne
-And the fireworks are through
-Here we are, me and you
-Feeling lost and feeling blue
-It's the end of the party
-And the morning seems so grey
-So unlike yesterday
-Now's the time for us to say
+    text = '''Yo ho, yo ho, a pirate's life for me.
+We pillage plunder, we rifle and loot.
+Drink up me 'earties, yo ho.
+We kidnap and ravage and don't give a hoot.
+Drink up me 'earties, yo ho.
 
-Happy New Year
-Happy New Year
-May we all have a vision now and then
-Of a world where every neighbor is a friend
-Happy New Year
-Happy New Year
-May we all have our hopes, our will to try
-If we don't we might as well lay down and die
-You and I
+Yo ho, yo ho, a pirate's life for me.
+We extort and pilfer, we filch and sack.
+Drink up me 'earties, yo ho.
+Maraud and embezzle and even highjack.
+Drink up me 'earties, yo ho.
 
-Sometimes I see
-How the brave new world arrives
-And I see how it thrives
-In the ashes of our lives
-Oh yes, man is a fool
-And he thinks he'll be okay
-Dragging on, feet of clay
-Never knowing he's astray
-Keeps on going anyway
+Yo ho, yo ho, a pirate's life for me.
+We kindle and char and in flame and ignite.
+Drink up me 'earties, yo ho.
+We burn up the city, we're really a fright.
+Drink up me 'earties, yo ho.
 
-Happy New Year
-Happy New Year
-May we all have a vision now and then
-Of a world where every neighbor is a friend
-Happy New Year
-Happy New Year
-May we all have our hopes, our will to try
-If we don't we might as well lay down and die
-You and I
+We're rascals and scoundrels, we're villians and knaves.
+Drink up me 'earties, yo ho.
+We're devils and black sheep, we're really bad eggs.
+Drink up me 'earties, yo ho.
 
-Seems to me now
-That the dreams we had before
-Are all dead, nothing more
-Than confetti on the floor
-It's the end of a decade
-In another ten years time
-Who can say what we'll find
-What lies waiting down the line
-In the end of eighty-nine
-
-Happy New Year
-Happy New Year
-May we all have a vision now and then
-Of a world where every neighbor is a friend
-Happy New Year
-Happy New Year
-May we all have our hopes, our will to try
-If we don't we might as well lay down and die
-You and I'''
+We're beggars and blighters and ne'er do-well cads,
+Drink up me 'earties, yo ho.
+Aye, but we're loved by our mommies and dads,
+Drink up me 'earties, yo ho.
+Yo ho, yo ho, a pirate's life for me.'''
     status = random.choice(range(10)) == 0
     objects = {"status": status, "text": text}
     return JsonResponse(objects)
