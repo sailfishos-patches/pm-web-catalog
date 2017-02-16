@@ -109,21 +109,25 @@ def edit_project(request, project):
         screenshot_form = ScreenshotForm(initial={'project': project})
         if request.method == 'POST':
             if 'file-edit' in request.POST:
-                file_form = FileEditForm(request.POST, request.FILES, instance=FilesModel.objects.get(id=request.POST.get('fileid')))
-                formid = int(request.POST.get('formid'))
-                files_forms[formid] = file_form
-                if file_form.is_valid():
-                    file_form.save()
-                    item.save()
-                    return redirect('view_project', project)
+                file_instance = FilesModel.objects.filter(id=request.POST.get('fileid'))
+                if file_instance.exists():
+                    file_form = FileEditForm(request.POST, request.FILES, instance=file_instance.first())
+                    formid = int(request.POST.get('formid'))
+                    files_forms[formid] = file_form
+                    if file_form.is_valid():
+                        file_form.save()
+                        item.save()
+                        return redirect('view_project', project)
             elif 'file-delete' in request.POST:
-                file_object = FilesModel.objects.get(id=request.POST.get('fileid'))
-                formid = int(request.POST.get('formid'))
-                files_forms.pop(formid)
-                file_object.delete()
-                fs = FileSystemStorage()
-                if fs.exists(file_object.document.name):
-                    fs.delete(file_object.document.name)
+                file_instance = FilesModel.objects.filter(id=request.POST.get('fileid'))
+                if file_instance.exists():
+                    file_object = file_instance.first()
+                    formid = int(request.POST.get('formid'))
+                    files_forms.pop(formid)
+                    file_object.delete()
+                    fs = FileSystemStorage()
+                    if fs.exists(file_object.document.name):
+                        fs.delete(file_object.document.name)
             elif 'project-edit' in request.POST:
                 project_form = ProjectEditForm(request.POST, instance=item)
                 if project_form.is_valid():
@@ -147,20 +151,21 @@ def edit_project(request, project):
                         instance.save()
                     return redirect('edit_project', project)
             elif 'screenshot-delete' in request.POST:
-                screenshot_object = ScreenshotsModel.objects.get(id=request.POST.get('screenshotid'))
-                screenshot_object.delete()
-                fs = FileSystemStorage()
-                if fs.exists(screenshot_object.screenshot.name):
-                    fs.delete(screenshot_object.screenshot.name)
-                screenshots_objects = ScreenshotsModel.objects.filter(project=project)
-        else:
-            return render(request, 'edit_project.html', {
-                'files_forms': files_forms,
-                'project_form': project_form,
-                'upload_form': upload_form,
-                'screenshots': screenshots_objects,
-                'screenshot_form': screenshot_form,
-            })
+                screenshot_instance = ScreenshotsModel.objects.filter(id=request.POST.get('screenshotid'))
+                if screenshot_instance.exists():
+                    screenshot_object = screenshot_instance.first()
+                    screenshot_object.delete()
+                    fs = FileSystemStorage()
+                    if fs.exists(screenshot_object.screenshot.name):
+                        fs.delete(screenshot_object.screenshot.name)
+                    screenshots_objects = ScreenshotsModel.objects.filter(project=project)
+        return render(request, 'edit_project.html', {
+            'files_forms': files_forms,
+            'project_form': project_form,
+            'upload_form': upload_form,
+            'screenshots': screenshots_objects,
+            'screenshot_form': screenshot_form,
+        })
     else:
         return redirect('view_project', project)
 
