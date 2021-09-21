@@ -1,11 +1,16 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
+from django.views.decorators.csrf import csrf_exempt
+
+from datetime import datetime
 
 from example.demo.models import *
 from example.demo.forms import *
 
 import random
+import sys
 
 
 def model_form_upload(request):
@@ -15,6 +20,7 @@ def model_form_upload(request):
         screenshot_form = ScreenshotForm(request.POST, request.FILES, prefix="scr")
         if project_form.is_valid() and file_form.is_valid() and screenshot_form.is_valid():
             project = project_form.save(commit=False)
+            project.last_updated = datetime.now()
             file = file_form.save(commit=False)
             file.project = project.name
             project.save()
@@ -40,14 +46,14 @@ def model_form_upload(request):
 
 
 def view_projects(request):
-    projects = ProjectsModel.objects.all()
+    projects = ProjectsModel.objects.order_by('-last_updated')
     return render(request, 'view_projects.html', {
         'documents': projects,
     })
 
 
 def view_user_projects(request, user):
-    projects = ProjectsModel.objects.filter(author=user)
+    projects = ProjectsModel.objects.filter(author=user).order_by('-last_updated')
     return render(request, 'view_projects.html', {
         'documents': projects,
         'author': user
@@ -58,7 +64,7 @@ def view_project(request, project):
     item = ProjectsModel.objects.filter(name=project)
     if item.exists():
         item = item.first()
-        files = FilesModel.objects.filter(project=project)
+        files = FilesModel.objects.filter(project=project).order_by('-uploaded')
         screenshots_objects = ScreenshotsModel.objects.filter(project=project)
         return render(request, 'view_project.html', {
             'project': item,
@@ -101,7 +107,7 @@ def edit_project(request, project):
     item = ProjectsModel.objects.filter(name=project)
     item = item.first() if item.exists() else False
     if item and request.user.is_authenticated and (request.user.username == item.author or request.user.is_staff):
-        files = FilesModel.objects.filter(project=project)
+        files = FilesModel.objects.filter(project=project).order_by('-uploaded')
         files_forms = [FileEditForm(instance=file) for file in files]
         screenshots_objects = ScreenshotsModel.objects.filter(project=project)
         project_form = ProjectEditForm(instance=item)
@@ -116,6 +122,7 @@ def edit_project(request, project):
                     files_forms[formid] = file_form
                     if file_form.is_valid():
                         file_form.save()
+                        item.last_updated = datetime.now()
                         item.save()
                         return redirect('view_project', project)
             elif 'file-delete' in request.POST:
@@ -137,6 +144,8 @@ def edit_project(request, project):
                 upload_form = FileForm(request.POST, request.FILES)
                 if upload_form.is_valid():
                     upload_form.save()
+                    item.last_updated = datetime.now()
+                    item.save()
                     return redirect('edit_project', project)
             elif 'screenshot-upload' in request.POST:
                 screenshot_form = ScreenshotForm(request.POST, request.FILES)
@@ -180,7 +189,7 @@ def api_projects(request):
         names = set()
         [names.add(file['project']) for file in files]
         attrs['name__in'] = names
-    objects = ProjectsModel.objects.filter(**attrs).order_by('category', 'display_name')
+    objects = ProjectsModel.objects.filter(**attrs).order_by('-last_updated')
     return JsonResponse(list(objects.values()), safe=False)
 
 
@@ -218,10 +227,10 @@ def api_project(request):
                     if 'twice' in attrs:
                         project_item.rating += 1
                     project_item.save()
-                elif action == 'downvote':
-                    project_item.rating -= 1
-                    if 'twice' in attrs:
-                        project_item.rating -= 1
+#                elif action == 'downvote':
+#                    project_item.rating -= 1
+#                    if 'twice' in attrs:
+#                        project_item.rating -= 1
                     project_item.save()
                 rating = project_item.rating
             objects = {'status': status, 'project': project, 'rating': rating}
@@ -236,14 +245,14 @@ def api_project(request):
         if status and project_query.count() == 1:
             objects = project_query.values()[0]
             if version:
-                files = FilesModel.objects.filter(project=objects['name'], version=version)
+                files = FilesModel.objects.filter(project=objects['name'], version=version).order_by('-uploaded').values()
                 if files.exists() and files.count() == 1:
                     objects['version'] = version
                     objects['compatible'] = files.values()[0]['compatible']
                 objects.pop('total_activations')
                 objects.pop('rating')
             else:
-                files = FilesModel.objects.filter(project=objects['name']).values()
+                files = FilesModel.objects.filter(project=objects['name']).order_by('-uploaded').values()
                 screenshots = ScreenshotsModel.objects.filter(project=objects['name']).values()
                 objects['files'] = list(files)
                 objects['screenshots'] = list(screenshots)
@@ -286,7 +295,7 @@ def api_files(request):
             version = attrs.pop('version')
         if version:
             attrs['compatible__contains'] = version
-        files = FilesModel.objects.filter(**attrs)
+        files = FilesModel.objects.filter(**attrs).order_by('-uploaded')
         objects = list(files.values())
     return JsonResponse(objects, safe=False)
 

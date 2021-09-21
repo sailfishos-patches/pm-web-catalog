@@ -15,10 +15,17 @@ Patchmanager2 Documentation (kinda)
 <p>Allowed extra content:</p>
   <ul>
     <li>Allowed to have extra files with extensions: '.qml' '.js' '.png' '.svg' '.qm'</li>
-    <li>Patch translation qm files should be named "translation_LANG.qm"</li>
-    <li>Optional patch file icon should be named main.png</li>
+    <li>Patch translation qm files should be named "translation_LANG.qm" or "PATCHNAME-LANG.qm"</li>
+    <li>Optional patch file icon should be named main.png or main.svg, you can include also main-light.png or main-light.svg icon</li>
     <li>Optional patch settings entry file should be named main.qml
     <br>You can push as many extra pages from your main qml. All extra files are located in same directory</li>
+  </ul>
+<p>Translation tips and tricks:</p>
+  <ul>
+    <li>Add: <pre>import org.SfietKonstantin.patchmanager 2.0</pre></li>
+    <li>In the root item add: <pre>property bool pmTranslationLoaded: PatchManagerTranslator ? PatchManagerTranslator.installTranslator("my-patch-name") : false</pre></li>
+    <li>In the first visible text item replace text with following: <pre>pmTranslationLoaded ? qsTr("Translated text") : "Please update patchmanager!"</pre></li>
+    <li>If translation is not loaded try using qsTranslate() strings instead: <pre>pmTranslationLoaded ? qsTranslate("pm", "Translated text") : "Please update patchmanager!"</pre></li>
   </ul>
 <p>Project fields verification:</p>
   <ul>

@@ -1,0 +1,8 @@
+from example.demo import views
+
+
+urlpatterns = [
+    url(r'^project/(.+)/upvote$', views.upvote_project, name='upvote_project'),
+    url(r'^project/(.+)/downvote$', views.downvote_project, name='downvote_project'),
+    url(r'^file/(.+)/activation$', views.file_activation, name='file_activation'),
+]

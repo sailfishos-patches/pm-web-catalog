@@ -22,7 +22,7 @@ class ProjectsModel(models.Model):
         if not re.match(r'^([\w-]*)$', text):
             raise ValidationError('Name string "%s" doesnt match template "a-ZA-Z0-9-_"' % text)
 
-    category_default = "others"
+    category_default = "other"
     category_choices = (
         ("homescreen", "Homescreen"),
         ("browser", "Browser"),
@@ -38,11 +38,12 @@ class ProjectsModel(models.Model):
         ("phone", "Phone"),
         ("silica", "Silica"),
         ("settings", "Settings"),
-        ("others", "Others")
+        ("keyboard", "Keyboard"),
+        ("other", "Others")
     )
 
     description = models.CharField(max_length=4096, blank=False)
-    last_updated = models.DateTimeField(auto_now=True)
+    last_updated = models.DateTimeField(auto_now_add=True)
     name = models.CharField(blank=False, unique=True, max_length=255, validators=[validate_name])
     display_name = models.CharField(blank=False, max_length=255)
     category = models.CharField(blank=False, max_length=255, choices=category_choices, default=category_default)
@@ -68,16 +69,50 @@ class FilesModel(models.Model):
 
     fs = OverwriteStorage()
 
-    compatible_choices_default = "2.1.0.9"
+    compatible_choices_default = "2.1.1.24"
     compatible_choices = (
         ("1.1.9.30", "1.1.9.30"),
         ("2.0.2.51", "2.0.2.51"),
         ("2.0.4.14", "2.0.4.14"),
         ("2.0.5.6", "2.0.5.6"),
-        ("2.1.0.9", "2.1.0.9"),
-        ("2.1.0.10", "2.1.0.10"),
-        ("2.1.0.11", "2.1.0.11")
-    )
+        ("2.1.0.11", "2.1.0.11"),
+        ("2.1.1.12", "2.1.1.12"),
+        ("2.1.1.23", "2.1.1.23"),
+        ("2.1.1.24", "2.1.1.24"),
+        ("2.1.1.26", "2.1.1.26"),
+        ("2.1.2.3", "2.1.2.3"),
+        ("2.1.3.3", "2.1.3.3"),
+        ("2.1.3.5", "2.1.3.5"),
+        ("2.1.3.7", "2.1.3.7"),
+        ("2.1.4.13", "2.1.4.13"),
+        ("2.1.4.14", "2.1.4.14"),
+        ("2.1.4.15", "2.1.4.15"),
+        ("2.2.0.29", "2.2.0.29"),
+        ("2.2.1.18", "2.2.1.18"),
+        ("2.2.1.19", "2.2.1.19"),
+        ("3.0.0.5", "3.0.0.5"),
+        ("3.0.0.8", "3.0.0.8"),
+        ("3.0.0.11", "3.0.0.11"),
+        ("3.0.1.11", "3.0.1.11"),
+        ("3.0.1.14", "3.0.1.14"),
+        ("3.0.2.8", "3.0.2.8"),
+        ("3.0.3.8", "3.0.3.8"),
+        ("3.0.3.9", "3.0.3.9"),
+        ("3.0.3.10", "3.0.3.10"),
+        ("3.1.0.11", "3.1.0.11"),
+        ("3.2.0.12", "3.2.0.12"),
+        ("3.2.0.14", "3.2.0.14"),
+        ("3.2.1.19", "3.2.1.19"),
+        ("3.2.1.20", "3.2.1.20"),
+        ("3.3.0.14", "3.3.0.14"),
+        ("3.3.0.16", "3.3.0.16"),
+        ("3.4.0.22", "3.4.0.22"),
+        ("3.4.0.24", "3.4.0.24"),
+        ("4.0.1.45", "4.0.1.45"),
+        ("4.0.1.48", "4.0.1.48"),
+        ("4.1.0.24", "4.1.0.24"),
+        ("4.2.0.19", "4.2.0.19"),
+      )
 
     def validate_file_type(upload):
         if not upload.name.lower().endswith(extensions):
@@ -96,7 +131,7 @@ class FilesModel(models.Model):
         if not re.match(r'^(\d+)\.(\d+)\.(\d+)$', ver):
             raise ValidationError('Version string "%s" doesnt match template "0-9.0-9.0-9", like 1.2.3' % ver)
 
-    uploaded = models.DateTimeField(auto_now=True)
+    uploaded = models.DateTimeField(auto_now_add=True)
     author = models.CharField(blank=True, max_length=255)
     project = models.CharField(blank=True, max_length=255)
     document = models.FileField(storage=fs, upload_to=upload_path_handler, validators=[validate_file_type])

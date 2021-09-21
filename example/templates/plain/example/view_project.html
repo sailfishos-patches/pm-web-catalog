@@ -35,7 +35,7 @@ Project: {{ project.name }}
 {% for file in files %}
   <li>
     <p><small>Version: {{ file.version }}</small></p>
-    <p><small>Compatible: {{ file.compatible }}</small></p>
+    <p><small>Compatible: {{ file.compatible|join:', ' }}</small></p>
     <p><small>Uploaded at: {{ file.uploaded }}</small></p>
     <p><small>Activations: {{ file.activations }}</small></p>
     <p><small>Changelog: {{ file.changelog | linebreaksbr }}</small></p>
