@@ -19,8 +19,8 @@ class OverwriteStorage(FileSystemStorage):
 
 class ProjectsModel(models.Model):
     def validate_name(text):
-        if not re.match(r'^([\w-]*)$', text):
-            raise ValidationError('Name string "%s" doesnt match template "a-ZA-Z0-9-_"' % text)
+        if not re.match(r'^([a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9])$', text):
+            raise ValidationError('Name string "%s" does not match RegEx "^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$"' % text)
 
     category_default = "other"
     category_choices = (
