@@ -133,8 +133,8 @@ class FilesModel(models.Model):
             raise ValidationError(message)
 
     def validate_version(ver):
-        if not re.match(r'^(\d+)\.(\d+)\.(\d+)$', ver):
-            raise ValidationError('Version string "%s" doesnt match template "0-9.0-9.0-9", like 1.2.3' % ver)
+        if not re.match(r'^([0-9]+)\.([0-9]+)\.([0-9]+)$', ver):
+            raise ValidationError('Version string "%s" does not match EnhancedRegEx (ERE) "[0-9]+\.[0-9]+\.[0-9]+", like 1.2.3' % ver)
 
     uploaded = models.DateTimeField(auto_now_add=True)
     author = models.CharField(blank=True, max_length=255)
