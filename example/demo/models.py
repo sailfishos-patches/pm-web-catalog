@@ -122,7 +122,7 @@ class FilesModel(models.Model):
 
     def validate_file_type(upload):
         if not re.search(r'^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$', upload.name):
-            raise ValidationError('File-name "%s" does not match RegEx "^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$".' % upload.name)
+            raise ValidationError('File-name "%s" does not match RegEx "^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$"!' % upload.name)
         if not upload.name.lower().endswith(extensions):
             raise ValidationError('Unsupported file extension in: %s' % upload.name.lower())
         if upload.file.size > maximum_file_size:
