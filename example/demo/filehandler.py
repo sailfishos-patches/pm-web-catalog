@@ -28,13 +28,16 @@ class ArchiveVerifier:
         options = ['unified_diff.patch']
         extensions = ('.qml', '.js', '.png', '.svg', '.qm')
         for o in options:
-            valid &= o in content
             if o not in content:
-                message += '{} not found in archive\n'.format(o)
+                valid = False
+                message += '{} not found in archive!\n'.format(o)
         if len(content) > 3:
             for i in content:
                 if i not in options:
                     if not i.endswith(extensions):
                         valid = False
-                        message += '\n{} contains not allowed file extension'.format(i)
+                        message += '\nFile "{}" has a forbidden file extension!'.format(i)
+                    if not re.search(r'^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$', i):
+                        valid = False
+                        message += '\nFile-name "{}" does not match RegEx "^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$"'.format(i)
         return [valid, message, ' - {}'.format(' - \n'.join(content))]
