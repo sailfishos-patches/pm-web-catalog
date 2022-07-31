@@ -20,7 +20,7 @@ class OverwriteStorage(FileSystemStorage):
 class ProjectsModel(models.Model):
     def validate_name(text):
         if not re.search(r'^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$', text):
-            raise ValidationError('Name string "%s" does not match RegEx "^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$"' % text)
+            raise ValidationError('Name string "%s" does not match RegEx "^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$"!' % text)
 
     category_default = "other"
     category_choices = (
@@ -134,7 +134,7 @@ class FilesModel(models.Model):
 
     def validate_version(ver):
         if not re.search(r'^[0-9]+\.[0-9]+\.[0-9]+$', ver):
-            raise ValidationError('Version string "%s" does not match EnhancedRegEx (ERE) "^[0-9]+\.[0-9]+\.[0-9]+$", like 1.2.3' % ver)
+            raise ValidationError('Version string "%s" does not match EnhancedRegEx (ERE) "^[0-9]+\.[0-9]+\.[0-9]+$" (e.g, 1.2.3)!' % ver)
 
     uploaded = models.DateTimeField(auto_now_add=True)
     author = models.CharField(blank=True, max_length=255)
