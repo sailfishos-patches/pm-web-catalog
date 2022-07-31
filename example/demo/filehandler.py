@@ -39,5 +39,5 @@ class ArchiveVerifier:
                         message += '\nFile "{}" has a forbidden file extension!'.format(i)
                     if not re.search(r'^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$', i):
                         valid = False
-                        message += '\nFile-name "{}" does not match RegEx "^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$"'.format(i)
+                        message += '\nFile-name "{}" does not match RegEx "^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$"!'.format(i)
         return [valid, message, ' - {}'.format(' - \n'.join(content))]
