@@ -21,14 +21,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{% url 'home' %}">Patchmanager 2.0</a>
+          <a class="navbar-brand" href="{% url 'home' %}">Web Catalog for Patchmanager 2 & 3</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="{% url 'helpme_page' %}">Documentation (kinda)</a></li>
-            <li><a href="{% url 'view_projects' %}">All projects</a></li>
+            <li><a href="{% url 'helpme_page' %}">Documentation</a></li>
+            <li><a href="{% url 'view_projects' %}">All Patches</a></li>
           	{% if user.is_authenticated %}
-            <li><a href="{% url 'view_user_projects' user.username %}">Your projects</a></li>
+            <li><a href="{% url 'view_user_projects' user.username %}">Your Patches</a></li>
             {% endif %}
           </ul>
           <ul class="nav navbar-nav navbar-right">
