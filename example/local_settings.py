@@ -4,7 +4,7 @@ import django
 print('### LOADING LOCAL SETTINGS')
 
 SITE_DOMAIN = 'coderus.openrepos.net'
-SITE_NAME = 'Patchmanager2 Landing'
+SITE_NAME = 'Web Catalog for Patchmanager'
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'coderus.openrepos.net']
 FORCE_SCRIPT_NAME = '/pm2'
@@ -25,7 +25,7 @@ EMAIL_PORT = 25
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
-DEFAULT_FROM_EMAIL = 'Patchmanager2 Activation Email <robot@coderus.openrepos.net>'
+DEFAULT_FROM_EMAIL = 'Patchmanager Web Catalog account activation email <robot@coderus.openrepos.net>'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 't8_)kj3v!au0!_i56#gre**mkg0&z1df%3bw(#5^#^5e_64!$_'
