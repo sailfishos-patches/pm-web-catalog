@@ -149,10 +149,12 @@ class FilesModel(models.Model):
       )
 
     def validate_file_type(upload):
+        if not re.search(r'^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$', upload.name):
+            raise ValidationError('File-name "%s" does not match RegEx "^[a-zA-Z][a-zA-Z0-9_.+-]*[a-zA-Z0-9]$"!' % upload.name)
         if not upload.name.lower().endswith(extensions):
             raise ValidationError('Unsupported file extension in: %s' % upload.name.lower())
         if upload.file.size > maximum_file_size:
-            raise ValidationError('File is too large. Maximum allowed size is 16MB')
+            raise ValidationError('File is too large: Maximum allowed size is 16 MBytes.')
         storage = FileSystemStorage()
         f = storage.save('tmp/%s' % upload.name, ContentFile(upload.file.read()))
         verified, message, content = ArchiveVerifier(f).is_valid()
@@ -181,9 +183,9 @@ class ScreenshotsModel(models.Model):
 
     def validate_content_type(upload):
         if not upload.file.content_type == 'image/png':
-            raise ValidationError('File content-type "%s" doesnt match image/png' % upload.file.content_type)
+            raise ValidationError('File content-type "%s" is not image/png !' % upload.file.content_type)
         if upload.file.size > maximum_file_size:
-            raise ValidationError('File is too large. Maximum allowed size is 16MB')
+            raise ValidationError('File is too large: Maximum allowed size is 16 MBytes.')
 
     fs = OverwriteStorage()
     screenshot = models.FileField(blank=True, storage=fs, upload_to=upload_screenshot_handler, validators=[validate_content_type])
