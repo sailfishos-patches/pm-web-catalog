@@ -1,37 +1,38 @@
 {% extends 'base.html' %}
 
 {% block head_title %}
-Patchmanager2 Documentation (kinda)
+Terse documentation of the Web Catalog for Patchmanager 2 & 3
 {% endblock %}
 
 {% block content %}
-<h1>Patch verification</h1>
+<h2>Patch verification</h2>
 <p>Archive verification:</p>
   <ul>
-    <li>Patch file allowed extensions are: .zip .tar.gz .tar.bz2 .tar.xz</li>
-    <li>Patch file should contain unified_diff.patch</li>
-    <li>Files should be placed inside archive without subfolders</li>
+    <li>Allowed extensions are: <pre>.zip</pre>, <pre>.tar.gz</pre>, <pre>.tar.bz2</pre> and <pre>.tar.xz</pre></li>
+    <li>Must contain a patch file called <pre>unified_diff.patch</pre></li>
+    <li>All files in the archive must be placed at the top level (i.e., not in folders).</li>
   </ul>
 <p>Allowed extra content:</p>
   <ul>
-    <li>Allowed to have extra files with extensions: '.qml' '.js' '.png' '.svg' '.qm'</li>
-    <li>Patch translation qm files should be named "translation_LANG.qm" or "PATCHNAME-LANG.qm"</li>
-    <li>Optional patch file icon should be named main.png or main.svg, you can include also main-light.png or main-light.svg icon</li>
-    <li>Optional patch settings entry file should be named main.qml
-    <br>You can push as many extra pages from your main qml. All extra files are located in same directory</li>
+    <li>Additional files with the extensions: <pre>.qml</pre>, <pre>.js</pre>, <pre>.png</pre>, <pre>.svg<pre> and <pre>.qm<pre></li>
+    <li>Patch translation <pre>qm</pre>-files should be named <pre>translation_LANG.qm</pre> or <pre>PATCHNAME-LANG.qm</pre>.</li>
+    <li>An optional icon for a Patch should be named <pre>main.png</pre> or <pre>main.svg</pre>, additionally a <pre>main-light.png</pre> or <pre>main-light.svg</pre> icon may be included for "light" (i.e., bright) ambiences.</li>
+    <li>An optional QML-file, which allows the user to configure the settings of a Patch should be named <pre>main.qml</pre>.
+    <br>Additional QML-pages may be called from <pre>main.qml</pre>. All extra files are located in same directory.</li>
   </ul>
 <p>Translation tips and tricks:</p>
   <ul>
     <li>Add: <pre>import org.SfietKonstantin.patchmanager 2.0</pre></li>
     <li>In the root item add: <pre>property bool pmTranslationLoaded: PatchManagerTranslator ? PatchManagerTranslator.installTranslator("my-patch-name") : false</pre></li>
-    <li>In the first visible text item replace text with following: <pre>pmTranslationLoaded ? qsTr("Translated text") : "Please update patchmanager!"</pre></li>
-    <li>If translation is not loaded try using qsTranslate() strings instead: <pre>pmTranslationLoaded ? qsTranslate("pm", "Translated text") : "Please update patchmanager!"</pre></li>
+    <li>In the first visible text item replace its text with: <pre>pmTranslationLoaded ? qsTr("Translated text") : "Please update Patchmanager!"</pre></li>
+    <li>If the translation is not loaded, try using <pre>qsTranslate()</pre> strings instead: <pre>pmTranslationLoaded ? qsTranslate("pm", "Translated text") : "Please update Patchmanager!"</pre></li>
   </ul>
 <p>Project fields verification:</p>
   <ul>
-    <li>Name field can contain only alphanumeric chars, underscore and hyphen.
-    <br>Available chars are 'a-z' 'A-Z' '0-9' '-' and '_'
-    <br>Name value is only used internally. For pretty name use Display name field.</li>
-    <li>Version should contain three numbers dot separated. Example: 1.2.3</li>
+    <li>The "Name" field must solely comprise alphanumeric characters, the underscore and the hyphen.
+    <br>I.e., available chars are <pre>a-z</pre>, <pre>A-Z</pre>, <pre>0-9</pre>, <pre>_</pre> and <pre>-</pre>.
+    <br>The name value is only used internally.  For a pretty name use the "Display name" field.</li>
+    <li>The version must comprise three natural numbers (including 0) separated by two dots, for example <pre>1.2.3</pre>, <pre>0.0.2</pre> or <pre>47.11.123</pre>.</li>
   </ul>
+<p><a href="https://github.com/sailfishos-patches/patchmanager#information-for-patch-developers">Additional information and guidance is avalilable at GitHub</a>.</p>
 {% endblock %}

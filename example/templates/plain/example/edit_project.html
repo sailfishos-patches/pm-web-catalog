@@ -2,7 +2,7 @@
 {% load bootstrap3 %}
 
 {% block head_title %}
-Project: {{ project_name }}
+Patch: {{ project_name }}
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,7 @@ Project: {{ project_name }}
 <p><form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   {% bootstrap_form project_form %}
-  {% bootstrap_button "Save project" button_type="submit" button_class="btn-primary" name="project-edit" %}
+  {% bootstrap_button "Save Patch" button_type="submit" button_class="btn-primary" name="project-edit" %}
 </form></p>
 <p><form method="post" enctype="multipart/form-data">
   {% csrf_token %}
@@ -61,6 +61,6 @@ Project: {{ project_name }}
   {% bootstrap_form upload_form layout=layout %}
   {% bootstrap_button "Upload file" button_type="submit" button_class="btn-primary" name="file-upload" %}
 </form></p>
-<p><a href="{% url 'delete_project' project_form.instance.name %}">Delete project</a></p>
+<p><a href="{% url 'delete_project' project_form.instance.name %}">Delete Patch</a></p>
 </div>
 {% endblock %}

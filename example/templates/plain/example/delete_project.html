@@ -7,10 +7,10 @@ Delete project: {{ project.name }}
 
 {% block content %}
 {% if user.is_authenticated %}{% if project.author == user.username or user.is_staff %}
-<p>You really want to delete project <b>{{ project.name }}</b>?</p>
+<p>Do you really want to delete Patch <b>{{ project.name }}</b>?</p>
 <p><form method="post" action="">
   {% csrf_token %}
-  {% bootstrap_button "Delete project" button_type="submit" button_class="btn-danger" %}
+  {% bootstrap_button "Delete Patch" button_type="submit" button_class="btn-danger" %}
 </form></p>
 {% endif %}{% endif %}
 <p><a href="{% url 'home' %}">Return to home</a></p>
